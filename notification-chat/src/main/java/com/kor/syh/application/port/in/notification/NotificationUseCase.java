@@ -1,4 +1,4 @@
-package com.kor.syh.application.port.in;
+package com.kor.syh.application.port.in.notification;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

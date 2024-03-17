@@ -7,9 +7,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class Chat {
+public class Notify {
 
-	private final Long id;
+	private final String id;
 	private final String sender;
 	private final String receiver;
 	private final String content;
