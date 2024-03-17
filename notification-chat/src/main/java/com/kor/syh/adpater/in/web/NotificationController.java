@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.kor.syh.CommonResponse;
-import com.kor.syh.application.port.in.MessageType;
-import com.kor.syh.application.port.in.NotificationUseCase;
-import com.kor.syh.application.port.in.SendMessageCommand;
-import com.kor.syh.application.port.in.SendNotificationUseCase;
+import com.kor.syh.application.port.in.notification.MessageType;
+import com.kor.syh.application.port.in.notification.NotificationUseCase;
+import com.kor.syh.application.port.in.notification.SendMessageCommand;
+import com.kor.syh.application.port.in.notification.SendNotificationUseCase;
 
 import lombok.RequiredArgsConstructor;
 
