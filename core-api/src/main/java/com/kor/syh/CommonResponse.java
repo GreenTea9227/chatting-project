@@ -1,7 +1,9 @@
 package com.kor.syh;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor(staticName = "of")
 public class CommonResponse<T> {
 	private static final String SUCCESS_STATUS = "success";
@@ -23,6 +25,10 @@ public class CommonResponse<T> {
 
 	public static <T> CommonResponse<T> fail(T data,String message) {
 		return CommonResponse.of(FAIL_STATUS, data, message);
+	}
+
+	public static  CommonResponse<?> fail(String message) {
+		return CommonResponse.of(FAIL_STATUS, null, message);
 	}
 	public static <T> CommonResponse<T> error(T data,String message) {
 		return CommonResponse.of(ERROR_STATUS, data, message);
