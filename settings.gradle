@@ -1,0 +1,3 @@
+rootProject.name = 'chatting-project'
+
+include 'notification-chat'
