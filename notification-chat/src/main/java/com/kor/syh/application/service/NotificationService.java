@@ -6,7 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.kor.syh.application.port.in.MessageType;
 import com.kor.syh.application.port.in.NotificationUseCase;
+import com.kor.syh.application.port.in.SendMessageCommand;
 import com.kor.syh.application.port.in.SendNotificationUseCase;
 import com.kor.syh.application.port.out.persistence.NotificationChannelPort;
 import com.kor.syh.domain.Chat;
@@ -28,7 +30,7 @@ public class NotificationService implements NotificationUseCase, SendNotificatio
 		sseEmitter.onError((e) -> sseEmitter.complete());
 		sseEmitter.onCompletion(() -> notificationChannelPort.deleteById(memberId));
 
-		send(SERVER_ID, memberId, SUCCESS);
+		send(SendMessageCommand.of(MessageType.SERVER,SERVER_ID,memberId,SUCCESS));
 
 		notificationChannelPort.save(memberId, sseEmitter);
 		return sseEmitter;
@@ -40,7 +42,11 @@ public class NotificationService implements NotificationUseCase, SendNotificatio
 	}
 
 	@Override
-	public void send(String senderId, String receiverId, String content) {
+	public void send(SendMessageCommand command) {
+		String receiverId = command.getReceiverId();
+		String senderId = command.getSenderId();
+		String content = command.getContent();
+
 		SseEmitter sseEmitter = notificationChannelPort.findById(receiverId).orElseThrow();
 		try {
 			sseEmitter.send(SseEmitter.event()
