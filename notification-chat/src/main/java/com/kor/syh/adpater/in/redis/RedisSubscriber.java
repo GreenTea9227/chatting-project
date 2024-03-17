@@ -1,6 +1,7 @@
 package com.kor.syh.adpater.in.redis;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -25,13 +26,10 @@ public class RedisSubscriber implements MessageListener {
 	public void onMessage(Message message, byte[] pattern) {
 
 		try {
-
+			String receiver = new String(message.getChannel(), StandardCharsets.UTF_8);
 			Notify notify = objectMapper.readValue(message.getBody(), Notify.class);
-
 			receiveNotification.receive(notify);
-
 		} catch (IOException e) {
-			//todo error 처리
 			log.error("message error", e);
 			throw new RuntimeException(e);
 		}
