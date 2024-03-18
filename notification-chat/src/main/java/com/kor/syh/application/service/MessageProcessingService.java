@@ -7,12 +7,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.kor.syh.adpater.in.redis.ReceiveMessage;
 import com.kor.syh.application.port.in.notification.SendMessageCommand;
+import com.kor.syh.application.port.out.channel.SendMessage;
 import com.kor.syh.application.port.out.notification.SendNotificationUseCase;
 import com.kor.syh.application.port.in.notification.ReceiveNotificationUseCase;
 import com.kor.syh.application.port.out.notification.NotificationPersistencePort;
 import com.kor.syh.application.port.out.channel.MessagePublishPort;
-import com.kor.syh.domain.Notify;
 import com.kor.syh.domain.NotifyType;
 
 import lombok.RequiredArgsConstructor;
@@ -29,28 +30,28 @@ public class MessageProcessingService implements SendNotificationUseCase, Receiv
 		String receiverId = command.getReceiverId();
 		String senderId = command.getSenderId();
 		String content = command.getContent();
-		Notify notify = Notify.builder()
-							  .id(UUID.randomUUID().toString())
-							  .type(NotifyType.NOTIFY)
-							  .receiver(receiverId)
-							  .sender(senderId)
-							  .content(content)
-							  .time(LocalDateTime.now())
-							  .build();
-		return messagePublishPort.publish(notify);
+
+		SendMessage message = SendMessage.builder()
+									   .id(UUID.randomUUID().toString())
+									   .type(NotifyType.NOTIFY)
+									   .sender(senderId)
+									   .content(content)
+									   .time(LocalDateTime.now())
+									   .build();
+
+		return messagePublishPort.publish(receiverId,message);
 	}
 
 	@Override
-	public void receive(Notify notify) {
-		String receiver = notify.getReceiver();
-		String sender = notify.getSender();
+	public void receive(String receiver,ReceiveMessage command) {
+
 		SseEmitter sseEmitter = notificationPersistencePort.findById(receiver).orElseThrow();
 
 		try {
 			sseEmitter.send(SseEmitter.event()
-									  .id(notify.getId())
-									  .name(notify.getType().name())
-									  .data(notify));
+									  .id(command.getId())
+									  .name(command.getType().name())
+									  .data(command));
 		} catch (IOException e) {
 			notificationPersistencePort.deleteById(receiver);
 			throw new RuntimeException(e);

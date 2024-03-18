@@ -40,7 +40,7 @@ public class NotificationConfig {
 		// Key Serializer 설정
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		// Value Serializer 설정
-		redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
+		redisTemplate.setValueSerializer(new StringRedisSerializer());
 		redisTemplate.setConnectionFactory(redisConnectionFactory);
 
 		return redisTemplate;
@@ -48,9 +48,6 @@ public class NotificationConfig {
 
 	@Bean
 	public ObjectMapper objectMapper() {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new JavaTimeModule());
-		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-		return mapper;
+		return new ObjectMapper();
 	}
 }

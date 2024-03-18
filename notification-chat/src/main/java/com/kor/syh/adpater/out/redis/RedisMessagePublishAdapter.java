@@ -4,6 +4,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.kor.syh.application.port.out.channel.MessagePublishPort;
+import com.kor.syh.application.port.out.channel.SendMessage;
 import com.kor.syh.domain.Notify;
 import com.kor.syh.util.TopicUtils;
 
@@ -16,9 +17,8 @@ public class RedisMessagePublishAdapter implements MessagePublishPort {
 	private final RedisTemplate<String, Object> redisTemplate;
 
 	@Override
-	public Long publish(Notify notify) {
-		String receiver = notify.getReceiver();
+	public Long publish(String receiver,SendMessage message) {
 		String topic = TopicUtils.createTopic(receiver);
-		return redisTemplate.convertAndSend(topic, notify);
+		return redisTemplate.convertAndSend(topic, message);
 	}
 }

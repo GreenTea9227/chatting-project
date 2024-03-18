@@ -1,7 +1,7 @@
 package com.kor.syh.application.port.in.notification;
 
-import com.kor.syh.domain.Notify;
+import com.kor.syh.adpater.in.redis.ReceiveMessage;
 
 public interface ReceiveNotificationUseCase {
-	void receive(Notify notify);
+	void receive(String receiver, ReceiveMessage command);
 }

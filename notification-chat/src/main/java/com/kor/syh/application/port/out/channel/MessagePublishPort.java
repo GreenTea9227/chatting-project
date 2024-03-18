@@ -4,6 +4,6 @@ import com.kor.syh.domain.Notify;
 
 public interface MessagePublishPort {
 
-	Long publish(Notify notify);
+	Long publish(String receiver,SendMessage message);
 
 }
