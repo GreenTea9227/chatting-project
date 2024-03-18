@@ -1,4 +1,4 @@
-package com.kor.syh.application.port.out.redis;
+package com.kor.syh.application.port.out.channel;
 
 import com.kor.syh.domain.Notify;
 

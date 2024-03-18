@@ -12,7 +12,7 @@ import com.kor.syh.CommonResponse;
 import com.kor.syh.application.port.in.notification.MessageType;
 import com.kor.syh.application.port.in.notification.NotificationUseCase;
 import com.kor.syh.application.port.in.notification.SendMessageCommand;
-import com.kor.syh.application.port.in.notification.SendNotificationUseCase;
+import com.kor.syh.application.port.out.notification.SendNotificationUseCase;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,9 +30,10 @@ public class NotificationController {
 		return sseEmitter;
 	}
 
+	//TODO 비동기 통신을 이용할 수 있도록 조치 필요
 	@PostMapping("/send")
 	public CommonResponse<?> sendNotification(@RequestBody SendMessageRequest sendMessageRequest) {
-		// TODO senderId 수정 필요
+
 		Long result = sendNotificationUseCase.send(SendMessageCommand.of(MessageType.SEND,
 			"1",
 			sendMessageRequest.getReceiverId(),

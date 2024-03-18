@@ -7,13 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.kor.syh.application.port.out.persistence.NotificationChannelPort;
+import com.kor.syh.application.port.out.notification.NotificationPersistencePort;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Repository
-public class NotificationPersistenceAdapter implements NotificationChannelPort {
+public class NotificationPersistenceAdapter implements NotificationPersistencePort {
 	private final Map<String, SseEmitter> emitterMap = new ConcurrentHashMap<>();
 
 	@Override

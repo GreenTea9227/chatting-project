@@ -5,14 +5,14 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
 
 import com.kor.syh.adpater.in.redis.RedisSubscriber;
-import com.kor.syh.application.port.out.redis.MessageManagementPort;
+import com.kor.syh.application.port.out.channel.MessageManagementPort;
 import com.kor.syh.util.TopicUtils;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class RedisMessageManageService implements MessageManagementPort {
+public class RedisMessageManageAdapter implements MessageManagementPort {
 
 	private final RedisMessageListenerContainer container;
 	private final RedisSubscriber subscriber;

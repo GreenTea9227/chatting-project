@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.kor.syh.application.port.in.notification.SendMessageCommand;
-import com.kor.syh.application.port.in.notification.SendNotificationUseCase;
-import com.kor.syh.application.port.out.notification.ReceiveNotification;
-import com.kor.syh.application.port.out.persistence.NotificationChannelPort;
-import com.kor.syh.application.port.out.redis.MessagePublishPort;
+import com.kor.syh.application.port.out.notification.SendNotificationUseCase;
+import com.kor.syh.application.port.in.notification.ReceiveNotificationUseCase;
+import com.kor.syh.application.port.out.notification.NotificationPersistencePort;
+import com.kor.syh.application.port.out.channel.MessagePublishPort;
 import com.kor.syh.domain.Notify;
 import com.kor.syh.domain.NotifyType;
 
@@ -19,9 +19,9 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MessageProcessingService implements SendNotificationUseCase, ReceiveNotification {
+public class MessageProcessingService implements SendNotificationUseCase, ReceiveNotificationUseCase {
 
-	private final NotificationChannelPort notificationChannelPort;
+	private final NotificationPersistencePort notificationPersistencePort;
 	private final MessagePublishPort messagePublishPort;
 
 	@Override
@@ -44,14 +44,15 @@ public class MessageProcessingService implements SendNotificationUseCase, Receiv
 	public void receive(Notify notify) {
 		String receiver = notify.getReceiver();
 		String sender = notify.getSender();
-		SseEmitter sseEmitter = notificationChannelPort.findById(receiver).orElseThrow();
+		SseEmitter sseEmitter = notificationPersistencePort.findById(receiver).orElseThrow();
 
 		try {
 			sseEmitter.send(SseEmitter.event()
-									  .id(receiver)
+									  .id(notify.getId())
+									  .name(notify.getType().name())
 									  .data(notify));
 		} catch (IOException e) {
-			notificationChannelPort.deleteById(receiver);
+			notificationPersistencePort.deleteById(receiver);
 			throw new RuntimeException(e);
 		}
 

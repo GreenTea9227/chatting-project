@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.kor.syh.application.port.in.notification.NotificationUseCase;
-import com.kor.syh.application.port.out.persistence.NotificationChannelPort;
-import com.kor.syh.application.port.out.redis.MessageManagementPort;
+import com.kor.syh.application.port.out.notification.NotificationPersistencePort;
+import com.kor.syh.application.port.out.channel.MessageManagementPort;
 import com.kor.syh.domain.Notify;
 import com.kor.syh.domain.NotifyType;
 
@@ -22,7 +22,7 @@ public class NotificationManagementService implements NotificationUseCase {
 	public static final String SUCCESS = "success";
 	public static final String SERVER_ID = "server";
 
-	private final NotificationChannelPort notificationChannelPort;
+	private final NotificationPersistencePort notificationPersistencePort;
 	private final MessageManagementPort messageManagementPort;
 
 	@Override
@@ -30,14 +30,12 @@ public class NotificationManagementService implements NotificationUseCase {
 
 		SseEmitter sseEmitter = new SseEmitter(60 * 1000L);
 
-		notificationChannelPort.save(memberId, sseEmitter);
+		notificationPersistencePort.save(memberId, sseEmitter);
 		messageManagementPort.subscribe(memberId);
 
 		sseEmitter.onTimeout(sseEmitter::complete);
 		sseEmitter.onError((e) -> sseEmitter.complete());
-		sseEmitter.onCompletion(() -> {
-			deleteNotification(memberId);
-		});
+		sseEmitter.onCompletion(() -> deleteNotification(memberId));
 
 		sendDummyMessage(sseEmitter, memberId);
 		return sseEmitter;
@@ -45,7 +43,8 @@ public class NotificationManagementService implements NotificationUseCase {
 
 	@Override
 	public void deleteNotification(String memberId) {
-		notificationChannelPort.deleteById(memberId);
+		notificationPersistencePort.deleteById(memberId);
+		messageManagementPort.removeSubscribe(memberId);
 	}
 
 	private void sendDummyMessage(SseEmitter sseEmitter, String memberId) {
