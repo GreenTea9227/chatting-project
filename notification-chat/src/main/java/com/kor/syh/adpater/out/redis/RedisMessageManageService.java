@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.kor.syh.adpater.in.redis.RedisSubscriber;
 import com.kor.syh.application.port.out.redis.MessageManagementPort;
+import com.kor.syh.util.TopicUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +19,14 @@ public class RedisMessageManageService implements MessageManagementPort {
 
 	@Override
 	public void subscribe(String channelName) {
-		container.addMessageListener(subscriber, ChannelTopic.of(channelName));
+		String topic = TopicUtils.createTopic(channelName);
+		container.addMessageListener(subscriber, ChannelTopic.of(topic));
 	}
 
 	@Override
 	public void removeSubscribe(String channelName) {
-		container.removeMessageListener(subscriber, ChannelTopic.of(channelName));
+		String topic = TopicUtils.createTopic(channelName);
+		container.removeMessageListener(subscriber, ChannelTopic.of(topic));
 	}
 
 }

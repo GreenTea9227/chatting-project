@@ -26,7 +26,7 @@ public class RedisSubscriber implements MessageListener {
 	public void onMessage(Message message, byte[] pattern) {
 
 		try {
-			String receiver = new String(message.getChannel(), StandardCharsets.UTF_8);
+			String fullTopicName = new String(message.getChannel(), StandardCharsets.UTF_8);
 			Notify notify = objectMapper.readValue(message.getBody(), Notify.class);
 			receiveNotification.receive(notify);
 		} catch (IOException e) {
