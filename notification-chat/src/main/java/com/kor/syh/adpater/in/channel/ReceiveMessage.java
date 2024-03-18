@@ -1,4 +1,4 @@
-package com.kor.syh.adpater.in.redis;
+package com.kor.syh.adpater.in.channel;
 
 import java.time.LocalDateTime;
 

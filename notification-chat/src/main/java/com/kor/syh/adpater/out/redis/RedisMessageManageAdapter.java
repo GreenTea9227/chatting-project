@@ -4,7 +4,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
 
-import com.kor.syh.adpater.in.redis.RedisSubscriber;
+import com.kor.syh.adpater.in.channel.RedisSubscriber;
 import com.kor.syh.application.port.out.channel.MessageManagementPort;
 import com.kor.syh.util.TopicUtils;
 

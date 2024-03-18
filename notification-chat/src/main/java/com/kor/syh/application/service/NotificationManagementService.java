@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.kor.syh.application.port.in.notification.NotificationUseCase;
-import com.kor.syh.application.port.out.notification.NotificationPersistencePort;
 import com.kor.syh.application.port.out.channel.MessageManagementPort;
+import com.kor.syh.application.port.out.notification.NotificationPersistencePort;
 import com.kor.syh.domain.Notify;
 import com.kor.syh.domain.NotifyType;
 

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.kor.syh.application.port.out.channel.MessagePublishPort;
 import com.kor.syh.application.port.out.channel.SendMessage;
-import com.kor.syh.domain.Notify;
 import com.kor.syh.util.TopicUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ public class RedisMessagePublishAdapter implements MessagePublishPort {
 	private final RedisTemplate<String, Object> redisTemplate;
 
 	@Override
-	public Long publish(String receiver,SendMessage message) {
+	public Long publish(String receiver, SendMessage message) {
 		String topic = TopicUtils.createTopic(receiver);
 		return redisTemplate.convertAndSend(topic, message);
 	}

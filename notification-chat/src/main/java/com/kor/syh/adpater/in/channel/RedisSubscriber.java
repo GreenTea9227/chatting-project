@@ -1,4 +1,4 @@
-package com.kor.syh.adpater.in.redis;
+package com.kor.syh.adpater.in.channel;
 
 import java.nio.charset.StandardCharsets;
 
@@ -27,6 +27,6 @@ public class RedisSubscriber implements MessageListener {
 		String receiver = TopicUtils.extractTopic(fullTopicName);
 		ReceiveMessage receiveMessage = JsonUtil.byteToClass(message.getBody(), ReceiveMessage.class);
 
-		receiveNotification.receive(receiver,receiveMessage);
+		receiveNotification.receive(receiver, receiveMessage);
 	}
 }

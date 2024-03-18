@@ -14,13 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Notify {
 
-
 	private String id;
 	private NotifyType type;
 	private String sender;
 	private String receiver;
 	private String content;
 	private LocalDateTime time;
-
 
 }
