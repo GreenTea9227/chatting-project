@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.kor.syh.notification.application.port.in.notification.ReceiveNotificationUseCase;
 import com.kor.syh.notification.util.TopicUtils;
-import com.kor.syh.cmmon.utils.JsonUtil;
+import com.kor.syh.common.utils.JsonUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.kor.syh.cmmon.constant;
+package com.kor.syh.common.constant;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

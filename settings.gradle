@@ -2,4 +2,4 @@ rootProject.name = 'chatting-project'
 
 include 'notification'
 include 'core-api'
-include 'member'
+include 'members'

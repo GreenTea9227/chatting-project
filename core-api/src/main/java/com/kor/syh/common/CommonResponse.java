@@ -1,4 +1,4 @@
-package com.kor.syh.cmmon;
+package com.kor.syh.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

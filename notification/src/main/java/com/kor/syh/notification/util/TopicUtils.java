@@ -1,6 +1,6 @@
 package com.kor.syh.notification.util;
 
-import static com.kor.syh.cmmon.constant.RedisKey.*;
+import static com.kor.syh.common.constant.RedisKey.*;
 
 public class TopicUtils {
 	public static String createTopic(String key) {

@@ -1,6 +1,6 @@
 package com.kor.syh.notification.application.port.in.notification;
 
-import com.kor.syh.cmmon.SelfValidating;
+import com.kor.syh.common.SelfValidating;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

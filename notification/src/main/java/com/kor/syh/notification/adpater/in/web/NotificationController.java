@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.kor.syh.cmmon.CommonResponse;
+import com.kor.syh.common.CommonResponse;
 import com.kor.syh.notification.application.port.in.notification.MessageType;
 import com.kor.syh.notification.application.port.in.notification.NotificationUseCase;
 import com.kor.syh.notification.application.port.in.notification.SendMessageCommand;

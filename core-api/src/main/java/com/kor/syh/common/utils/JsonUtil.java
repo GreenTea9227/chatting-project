@@ -1,4 +1,4 @@
-package com.kor.syh.cmmon.utils;
+package com.kor.syh.common.utils;
 
 import java.io.IOException;
 
