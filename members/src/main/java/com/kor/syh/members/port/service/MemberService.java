@@ -1,12 +1,17 @@
 package com.kor.syh.members.port.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kor.syh.members.domain.Member;
 import com.kor.syh.members.domain.MemberStatus;
+import com.kor.syh.members.port.in.member.FindMemberResponse;
+import com.kor.syh.members.port.in.member.FindMemberUseCase;
 import com.kor.syh.members.port.in.member.RegisterMemberCommand;
 import com.kor.syh.members.port.in.member.RegisterMemberUseCase;
+import com.kor.syh.members.port.out.member.FindMemberPort;
 import com.kor.syh.members.port.out.member.RegisterMemberPort;
 
 import lombok.RequiredArgsConstructor;
@@ -14,8 +19,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class MemberService implements RegisterMemberUseCase {
+public class MemberService implements RegisterMemberUseCase, FindMemberUseCase {
 	private final RegisterMemberPort registerMemberPort;
+	private final FindMemberPort findMemberPort;
 
 	@Override
 	public void register(RegisterMemberCommand command) {
@@ -29,5 +35,17 @@ public class MemberService implements RegisterMemberUseCase {
 							  .build();
 
 		registerMemberPort.register(member);
+	}
+
+	@Override
+	public FindMemberResponse find(String loginId, String password) {
+		Member optionalMember = findMemberPort.find(loginId, password);
+
+		return FindMemberResponse.builder()
+								 .id(optionalMember.getId())
+								 .loginId(optionalMember.getLoginId())
+								 .nickname(optionalMember.getNickname())
+								 .username(optionalMember.getUsername())
+								 .build();
 	}
 }

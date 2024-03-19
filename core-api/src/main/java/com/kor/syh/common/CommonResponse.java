@@ -14,8 +14,8 @@ public class CommonResponse<T> {
 	private final T data;
 	private final String message;
 
-	public static <T> CommonResponse<T> success(T data, String message) {
-		return CommonResponse.of(SUCCESS_STATUS, data, message);
+	public static <T> CommonResponse<T> success(T data,String message) {
+		return CommonResponse.of(SUCCESS_STATUS, data, null);
 	}
 
 	public static CommonResponse<?> success(String message) {
