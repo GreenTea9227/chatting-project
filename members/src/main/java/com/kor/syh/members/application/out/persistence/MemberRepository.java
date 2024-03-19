@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberRepository implements RegisterMemberPort {
 
 	private final SpringJpaMemberRepository memberRepository;
-	private final MemberMapper memberMapper;
-
 	@Override
 	public void register(Member member) {
 
