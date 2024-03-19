@@ -1,1 +1,11 @@
-
+spring:
+  profiles:
+    include: auth
+  datasource:
+    url: jdbc:mysql://localhost:3306/msa?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: root
+    password: 1111
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true

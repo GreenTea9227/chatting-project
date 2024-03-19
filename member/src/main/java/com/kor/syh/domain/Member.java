@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Member {
 	private String id;
+	private String loginId;
 	private String password;
 	private String username;
 	private String nickname;
