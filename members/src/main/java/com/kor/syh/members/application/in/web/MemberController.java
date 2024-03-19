@@ -1,6 +1,5 @@
 package com.kor.syh.members.application.in.web;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +24,8 @@ public class MemberController {
 			request.getLoginId(),
 			request.getPassword(),
 			request.getUsername(),
-			request.getNickname(),
-			request.getStatus()
-		);
+			request.getNickname()
+			);
 		registerMemberUseCase.register(command);
 
 		return CommonResponse.success("가입 성공");

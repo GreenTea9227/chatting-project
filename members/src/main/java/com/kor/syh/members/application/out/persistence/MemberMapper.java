@@ -11,6 +11,7 @@ public class MemberMapper {
 			member.getId(),
 			member.getLoginId(),
 			member.getPassword(),
+			member.getUsername(),
 			member.getNickname(),
 			member.getStatus()
 		);
