@@ -9,8 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+@AllArgsConstructor
 @Getter
 public class Member {
 	private String id;
@@ -20,5 +19,6 @@ public class Member {
 	private String nickname;
 	private MemberStatus status;
 	private LocalDateTime createdDate;
+	private LocalDateTime updateDate;
 
 }
