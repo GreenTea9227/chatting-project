@@ -1,4 +1,6 @@
 package com.kor.syh.members.application.out.persistence;
 
-public interface SpringJpaMemberRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SpringJpaMemberRepository extends JpaRepository<MemberJpaEntity,String> {
 }
