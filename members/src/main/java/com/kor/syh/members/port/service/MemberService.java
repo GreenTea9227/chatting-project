@@ -42,8 +42,8 @@ public class MemberService implements RegisterMemberUseCase, FindMemberUseCase {
 		return new FindMemberResponse(
 			member.getId(),
 			member.getLoginId(),
-			member.getNickname(),
 			member.getUsername(),
+			member.getNickname(),
 			member.getStatus()
 		);
 
