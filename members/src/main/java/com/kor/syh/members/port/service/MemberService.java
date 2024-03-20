@@ -1,7 +1,5 @@
 package com.kor.syh.members.port.service;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,13 +37,15 @@ public class MemberService implements RegisterMemberUseCase, FindMemberUseCase {
 
 	@Override
 	public FindMemberResponse find(String loginId, String password) {
-		Member optionalMember = findMemberPort.find(loginId, password);
+		Member member = findMemberPort.find(loginId, password);
 
-		return FindMemberResponse.builder()
-								 .id(optionalMember.getId())
-								 .loginId(optionalMember.getLoginId())
-								 .nickname(optionalMember.getNickname())
-								 .username(optionalMember.getUsername())
-								 .build();
+		return new FindMemberResponse(
+			member.getId(),
+			member.getLoginId(),
+			member.getNickname(),
+			member.getUsername(),
+			member.getStatus()
+		);
+
 	}
 }

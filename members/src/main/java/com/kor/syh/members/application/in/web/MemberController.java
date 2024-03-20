@@ -36,7 +36,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/find")
-	public CommonResponse<FindMemberResponse> register(@Valid @RequestBody FindMemberRequest request) {
+	public CommonResponse<FindMemberResponse> find(@Valid @RequestBody FindMemberRequest request) {
 		FindMemberResponse findMemberResponse = findMemberUseCase.find(request.getLoginId(), request.getPassword());
 
 		return CommonResponse.of("success", findMemberResponse, null);
