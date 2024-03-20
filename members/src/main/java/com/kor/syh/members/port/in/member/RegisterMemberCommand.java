@@ -1,7 +1,6 @@
 package com.kor.syh.members.port.in.member;
 
 import com.kor.syh.common.SelfValidating;
-import com.kor.syh.members.domain.MemberStatus;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -20,8 +19,6 @@ public class RegisterMemberCommand extends SelfValidating<RegisterMemberCommand>
 
 	@NotBlank
 	private String nickname;
-
-
 
 	public RegisterMemberCommand(String loginId, String password, String username, String nickname) {
 		this.loginId = loginId;

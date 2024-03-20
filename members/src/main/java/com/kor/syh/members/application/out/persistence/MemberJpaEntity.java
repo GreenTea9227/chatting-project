@@ -3,8 +3,6 @@ package com.kor.syh.members.application.out.persistence;
 import com.kor.syh.members.domain.MemberStatus;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -24,7 +22,8 @@ public class MemberJpaEntity extends BaseEntity {
 	private String nickname;
 	private MemberStatus status;
 
-	public MemberJpaEntity(String id,String loginId, String password, String username, String nickname, MemberStatus status) {
+	public MemberJpaEntity(String id, String loginId, String password, String username, String nickname,
+		MemberStatus status) {
 		this.id = id;
 		this.loginId = loginId;
 		this.password = password;

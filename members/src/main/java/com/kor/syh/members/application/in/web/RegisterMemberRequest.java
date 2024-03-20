@@ -1,7 +1,5 @@
 package com.kor.syh.members.application.in.web;
 
-import com.kor.syh.members.domain.MemberStatus;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

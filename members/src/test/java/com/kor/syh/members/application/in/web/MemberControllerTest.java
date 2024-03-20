@@ -32,6 +32,15 @@ class MemberControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	static Stream<Arguments> failRegisterMemberData() {
+		return Stream.of(
+			Arguments.of("", "password", "username", "nickname", "userId 누락"),
+			Arguments.of("userId", "", "username", "nickname", "password 누락"),
+			Arguments.of("userId", "password", "", "nickname", "username 누락"),
+			Arguments.of("userId", "password", "username", "", "nickname 누락")
+		);
+	}
+
 	@AfterEach
 	void cleaningData() {
 
@@ -79,15 +88,6 @@ class MemberControllerTest {
 					  .content(requestStr)))
 				  .hasCauseInstanceOf(ConstraintViolationException.class);
 
-	}
-
-	static Stream<Arguments> failRegisterMemberData() {
-		return Stream.of(
-			Arguments.of("", "password", "username", "nickname", "userId 누락"),
-			Arguments.of("userId", "", "username", "nickname", "password 누락"),
-			Arguments.of("userId", "password", "", "nickname", "username 누락"),
-			Arguments.of("userId", "password", "username", "", "nickname 누락")
-		);
 	}
 
 }

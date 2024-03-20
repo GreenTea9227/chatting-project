@@ -17,6 +17,7 @@ public class MemberRepository implements RegisterMemberPort, FindMemberPort {
 
 	private final SpringJpaMemberRepository memberRepository;
 	private final MemberMapper mapper;
+
 	@Override
 	public void register(Member member) {
 
