@@ -24,8 +24,6 @@ subprojects {
 
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
 
@@ -33,22 +31,25 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
-    tasks.named('bootJar') {
-        enabled = false
-    }
-
-    tasks.named('jar') {
-        enabled = true
-    }
 
     tasks.named('test') {
         useJUnitPlatform()
     }
+}
 
+project(':core-api') {
+    bootJar { enabled = false }
+    jar { enabled = true }
+}
 
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
+project(':members') {
+    bootJar { enabled = true }
+    jar { enabled = false }
+}
+
+project(':notification') {
+    bootJar { enabled = true }
+    jar { enabled = false }
 }
 
 configurations {
