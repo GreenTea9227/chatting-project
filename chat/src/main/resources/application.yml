@@ -7,3 +7,8 @@ custom:
     group_id: group_chat
     server: localhost:9092
 
+spring:
+  data:
+    mongodb:
+      uri: mongodb://john:1111@localhost:27018/chat?authSource=admin
+
