@@ -18,10 +18,7 @@ public class MessageConfig implements WebSocketMessageBrokerConfigurer {
 
 	private final MessageInterceptor messageInterceptor;
 
-	@Bean
-	public RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
+
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
