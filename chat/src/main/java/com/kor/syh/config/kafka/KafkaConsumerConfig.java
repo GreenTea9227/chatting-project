@@ -1,4 +1,4 @@
-package com.kor.syh.config;
+package com.kor.syh.config.kafka;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.kor.syh.chat.adapter.out.adapter;
+package com.kor.syh.chat.adapter.out.persistence;
 
 import org.springframework.stereotype.Component;
 

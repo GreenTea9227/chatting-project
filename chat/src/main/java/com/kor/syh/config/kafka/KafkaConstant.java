@@ -1,4 +1,4 @@
-package com.kor.syh.config;
+package com.kor.syh.config.kafka;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

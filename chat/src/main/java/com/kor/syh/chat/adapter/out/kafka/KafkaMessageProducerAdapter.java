@@ -7,13 +7,13 @@ import com.kor.syh.chat.application.port.out.kafka.KafkaMessageDto;
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
 import com.kor.syh.chat.domain.Message;
 import com.kor.syh.common.utils.JsonUtil;
-import com.kor.syh.config.KafkaConstant;
+import com.kor.syh.config.kafka.KafkaConstant;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class KafkaMessageProducer implements ProduceMessageBrokerPort {
+public class KafkaMessageProducerAdapter implements ProduceMessageBrokerPort {
 
 	private final KafkaTemplate<String, Object> kafkaTemplate;
 	private final KafkaConstant kafkaConstant;
