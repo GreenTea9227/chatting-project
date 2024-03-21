@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Getter
-public class Chat {
-	private String chatId;
+public class Message {
+	private String messageId;
 	private String roomId;
 	private String senderId;
 	private String content;
-	private ChatType type;
+	private MessageType type;
 	private LocalDateTime createdDate;
 
 }

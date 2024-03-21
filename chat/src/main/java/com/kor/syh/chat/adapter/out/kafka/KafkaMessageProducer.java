@@ -4,7 +4,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
-import com.kor.syh.chat.domain.Chat;
+import com.kor.syh.chat.domain.Message;
 import com.kor.syh.common.utils.JsonUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class KafkaMessageProducer implements ProduceMessageBrokerPort {
 	private final KafkaTemplate<String, Object> kafkaTemplate;
 
 	@Override
-	public void produce(String topic, Chat message) {
+	public void produce(String topic, Message message) {
 		kafkaTemplate.send(topic, JsonUtil.classToString(message));
 	}
 }

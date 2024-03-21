@@ -1,7 +1,7 @@
 package com.kor.syh.chat.application.port.out.kafka;
 
-import com.kor.syh.chat.domain.Chat;
+import com.kor.syh.chat.domain.Message;
 
 public interface ProduceMessageBrokerPort {
-	void produce(String topic, Chat message);
+	void produce(String topic, Message message);
 }

@@ -1,5 +1,5 @@
 package com.kor.syh.chat.domain;
 
-public enum ChatType {
+public enum MessageType {
 	ENTER, SEND, EXIT
 }
