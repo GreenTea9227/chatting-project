@@ -10,7 +10,6 @@ import com.kor.syh.chat.adapter.in.web.MessageDto;
 import com.kor.syh.chat.application.port.in.SendMessageUseCase;
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
 import com.kor.syh.chat.domain.Message;
-import com.kor.syh.config.KafkaConstant;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +31,6 @@ public class MessageService implements SendMessageUseCase {
 								 .build();
 
 		//TODO message mongo db 저장
-		produceMessageBrokerPort.produce(KafkaConstant.TOPIC_ID, message);
+		produceMessageBrokerPort.produce(message);
 	}
 }

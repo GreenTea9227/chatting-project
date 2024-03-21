@@ -1,2 +1,9 @@
 server:
   port: 8083
+
+custom:
+  kafka:
+    topic_id: chat
+    group_id: group_chat
+    server: localhost:9092
+

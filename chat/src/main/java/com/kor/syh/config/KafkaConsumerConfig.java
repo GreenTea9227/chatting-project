@@ -11,17 +11,20 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.kor.syh.chat.adapter.in.web.MessageDto;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Configuration
 public class KafkaConsumerConfig {
+
+	private final KafkaConstant kafkaConstant;
+
 	@Bean
 	public Map<String, Object> consumerConfig() {
 
 		Map<String, Object> props = new HashMap<>();
-		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstant.SERVER);
-		props.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstant.GROUP_ID);
+		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConstant.SERVER);
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConstant.GROUP_ID);
 		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

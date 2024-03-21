@@ -7,6 +7,7 @@ import com.kor.syh.chat.application.port.out.kafka.KafkaMessageDto;
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
 import com.kor.syh.chat.domain.Message;
 import com.kor.syh.common.utils.JsonUtil;
+import com.kor.syh.config.KafkaConstant;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,11 +16,12 @@ import lombok.RequiredArgsConstructor;
 public class KafkaMessageProducer implements ProduceMessageBrokerPort {
 
 	private final KafkaTemplate<String, Object> kafkaTemplate;
+	private final KafkaConstant kafkaConstant;
 
 	@Override
-	public void produce(String topic, Message message) {
+	public void produce(Message message) {
 		KafkaMessageDto kafkaMessageDto = new KafkaMessageDto(message.getRoomId(), message.getSenderId(),
 			message.getContent(), message.getType());
-		kafkaTemplate.send(topic, JsonUtil.classToString(kafkaMessageDto));
+		kafkaTemplate.send(kafkaConstant.TOPIC_ID, JsonUtil.classToString(kafkaMessageDto));
 	}
 }
