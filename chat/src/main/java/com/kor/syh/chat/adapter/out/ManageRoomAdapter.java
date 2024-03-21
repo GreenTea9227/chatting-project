@@ -17,9 +17,15 @@ public class ManageRoomAdapter implements ManageRoomParticipantPort {
 
 	@Override
 	public boolean isRoomParticipant(String roomId, String userId) {
-		Boolean isMember = redisTemplate.opsForSet().isMember(ROOM_PREFIX + roomId, userId);
-		return isMember != null && isMember;
+		return  redisTemplate.opsForHash().hasKey(ROOM_PREFIX + roomId, userId);
 	}
+
+	@Override
+	public boolean isParticipatingNow(String roomId, String userId) {
+		Integer fieldValue = (Integer)redisTemplate.opsForHash().get(ROOM_PREFIX + roomId, userId);
+		return fieldValue != null && fieldValue != 0;
+	}
+
 
 	@Override
 	public boolean isChatRoomExists(String roomId) {

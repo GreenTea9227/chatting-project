@@ -15,12 +15,17 @@ public class MessageInterceptor implements ChannelInterceptor {
 	public Message<?> preSend(Message<?> message, MessageChannel channel) {
 		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 		StompCommand command = accessor.getCommand();
-		switch (command) {
-			case CONNECT -> {
-				//TODO jwt token 확인 후  set user 설정
-			}
-		}
+		//TODO jwt token 확인 후  set user 설정
+
 
 		return message;
+	}
+
+	private void handleMessage(StompCommand command) {
+		switch (command) {
+			case CONNECT -> {
+				//
+			}
+		}
 	}
 }

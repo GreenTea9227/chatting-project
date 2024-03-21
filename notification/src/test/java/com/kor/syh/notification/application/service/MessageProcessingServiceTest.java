@@ -14,14 +14,14 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.kor.syh.notification.adpater.in.channel.ReceiveMessage;
+import com.kor.syh.common.NotifyType;
+import com.kor.syh.common.PublishNotificationDto;
 import com.kor.syh.notification.application.port.in.notification.MessageType;
 import com.kor.syh.notification.application.port.in.notification.SendMessageCommand;
 import com.kor.syh.notification.application.port.out.channel.MessagePublishPort;
 import com.kor.syh.notification.application.port.out.channel.SendMessage;
 import com.kor.syh.notification.application.port.out.notification.NotificationPersistencePort;
-import com.kor.syh.notification.application.service.MessageProcessingService;
-import com.kor.syh.notification.domain.NotifyType;
+
 
 @SpringBootTest
 class MessageProcessingServiceTest {
@@ -66,11 +66,11 @@ class MessageProcessingServiceTest {
 		doNothing().when(mock).send((SseEmitter.SseEventBuilder)any());
 
 		// when
-		ReceiveMessage receiveMessage = ReceiveMessage.builder()
-													  .id(senderId)
-													  .type(NotifyType.NOTIFY)
-													  .content(data)
-													  .build();
+		PublishNotificationDto receiveMessage = PublishNotificationDto.builder()
+																	  .id(senderId)
+																	  .type(NotifyType.SINGLE)
+																	  .content(data)
+																	  .build();
 		messageProcessingService.receive(receiverId, receiveMessage);
 
 		// then
@@ -92,11 +92,11 @@ class MessageProcessingServiceTest {
 		doThrow(new IOException()).when(mock).send((SseEmitter.SseEventBuilder)any());
 
 		// when
-		ReceiveMessage receiveMessage = ReceiveMessage.builder()
-													  .id(senderId)
-													  .type(NotifyType.NOTIFY)
-													  .content(data)
-													  .build();
+		PublishNotificationDto receiveMessage = PublishNotificationDto.builder()
+																	  .id(senderId)
+																	  .type(com.kor.syh.common.NotifyType.SINGLE)
+																	  .content(data)
+																	  .build();
 		Assertions.assertThatThrownBy(() ->
 			messageProcessingService.receive(receiverId, receiveMessage)
 		).isInstanceOf(RuntimeException.class);

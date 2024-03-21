@@ -4,7 +4,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
-import com.kor.syh.chat.application.port.in.SendMessageUseCase;
+import com.kor.syh.chat.application.port.in.HandleMessageUseCase;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class MessageController {
 
-	private final SendMessageUseCase sendMessageUseCase;
+	private final HandleMessageUseCase handleMessageUseCase;
 
 	@MessageMapping("/chat/{roomId}")
 	public void send(@DestinationVariable("roomId") String roomId, MessageDto message) {
 
 		log.info("roomId: {} , send message : {}",roomId, message);
 
-		sendMessageUseCase.sendChat(message);
+		handleMessageUseCase.publishMessage(message);
 
 	}
 }

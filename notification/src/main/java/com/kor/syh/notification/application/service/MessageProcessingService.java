@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.kor.syh.notification.adpater.in.channel.ReceiveMessage;
+import com.kor.syh.common.PublishNotificationDto;
 import com.kor.syh.notification.application.port.in.notification.ReceiveNotificationUseCase;
 import com.kor.syh.notification.application.port.in.notification.SendMessageCommand;
 import com.kor.syh.notification.application.port.out.channel.MessagePublishPort;
@@ -43,7 +43,7 @@ public class MessageProcessingService implements SendNotificationUseCase, Receiv
 	}
 
 	@Override
-	public void receive(String receiver, ReceiveMessage command) {
+	public void receive(String receiver, PublishNotificationDto command) {
 
 		SseEmitter sseEmitter = notificationPersistencePort.findById(receiver).orElseThrow();
 

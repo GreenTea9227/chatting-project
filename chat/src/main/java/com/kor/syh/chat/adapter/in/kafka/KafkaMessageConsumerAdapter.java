@@ -5,6 +5,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import com.kor.syh.chat.adapter.in.web.MessageDto;
+import com.kor.syh.chat.application.port.in.HandleMessageUseCase;
 import com.kor.syh.chat.application.port.in.kafka.ConsumeMessageBrokerPort;
 import com.kor.syh.chat.application.port.out.kafka.KafkaMessageDto;
 import com.kor.syh.common.utils.JsonUtil;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaMessageConsumerAdapter implements ConsumeMessageBrokerPort {
 
 	private final SimpMessagingTemplate simpMessagingTemplate;
+	private final HandleMessageUseCase handleMessageUseCase;
 
 	@Override
 	@KafkaListener(topics = "chat")
@@ -30,6 +32,6 @@ public class KafkaMessageConsumerAdapter implements ConsumeMessageBrokerPort {
 			kafkaMessageDto.getContent(),
 			kafkaMessageDto.getType()
 		);
-		simpMessagingTemplate.convertAndSend("/single/chat/" + messageDto.getRoomId(), messageDto);
+		handleMessageUseCase.sendMessageToUser(messageDto);
 	}
 }
