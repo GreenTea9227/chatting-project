@@ -13,6 +13,7 @@ public class MessageRepository implements SaveMessagePort {
 
 	private final SpringMongoMessageRepository springMongoMessageRepository;
 	private final MessageMapper mapper;
+
 	@Override
 	public void save(Message message) {
 		MongoMessage mongoMessage = mapper.toMongoMessage(message);

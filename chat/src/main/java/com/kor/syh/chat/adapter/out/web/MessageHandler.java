@@ -23,9 +23,9 @@ public class MessageHandler {
 	@MessageExceptionHandler(UnauthorizedRoomAccessException.class)
 	public void handleUnauthorizedRoomAccessException(UnauthorizedRoomAccessException e, Principal principal) {
 		log.error(e.getMessage());
-		MessageDto message = new MessageDto("server","server",e.getMessage(), MessageType.SEND);
+		MessageDto message = new MessageDto("server", "server", e.getMessage(), MessageType.SEND);
 
 		//TODO 에러 처리
-		simpMessagingTemplate.convertAndSendToUser(principal.getName(),"/single/chat",message );
+		simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/single/chat", message);
 	}
 }

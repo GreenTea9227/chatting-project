@@ -17,7 +17,7 @@ public class ManageRoomAdapter implements ManageRoomParticipantPort {
 
 	@Override
 	public boolean isRoomParticipant(String roomId, String userId) {
-		return  redisTemplate.opsForHash().hasKey(ROOM_PREFIX + roomId, userId);
+		return redisTemplate.opsForHash().hasKey(ROOM_PREFIX + roomId, userId);
 	}
 
 	@Override
@@ -25,7 +25,6 @@ public class ManageRoomAdapter implements ManageRoomParticipantPort {
 		String fieldValue = (String)redisTemplate.opsForHash().get(ROOM_PREFIX + roomId, userId);
 		return fieldValue != null && !fieldValue.equals("0");
 	}
-
 
 	@Override
 	public boolean isChatRoomExists(String roomId) {

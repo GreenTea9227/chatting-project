@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class SendMessageAdapter implements SendMessagePort {
 
 	private final SimpMessagingTemplate simpMessagingTemplate;
+
 	@Override
 	public void sendMessage(MessageDto messageDto) {
 		simpMessagingTemplate.convertAndSend("/single/chat/" + messageDto.getRoomId(), messageDto);

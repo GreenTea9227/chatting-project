@@ -17,7 +17,6 @@ public class MessageInterceptor implements ChannelInterceptor {
 		StompCommand command = accessor.getCommand();
 		//TODO jwt token 확인 후  set user 설정
 
-
 		return message;
 	}
 

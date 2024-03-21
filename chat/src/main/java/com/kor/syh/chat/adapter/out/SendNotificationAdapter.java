@@ -1,7 +1,5 @@
 package com.kor.syh.chat.adapter.out;
 
-import static com.kor.syh.common.constant.RedisKey.*;
-
 import java.util.UUID;
 
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class SendNotificationAdapter implements SendNotificationPort {
 
-	private final RedisTemplate<String,Object> redisTemplate;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	@Override
 	public void sendNotification(String fromId, String content) {
