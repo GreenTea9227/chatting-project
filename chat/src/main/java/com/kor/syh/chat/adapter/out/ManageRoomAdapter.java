@@ -22,8 +22,8 @@ public class ManageRoomAdapter implements ManageRoomParticipantPort {
 
 	@Override
 	public boolean isParticipatingNow(String roomId, String userId) {
-		Integer fieldValue = (Integer)redisTemplate.opsForHash().get(ROOM_PREFIX + roomId, userId);
-		return fieldValue != null && fieldValue != 0;
+		String fieldValue = (String)redisTemplate.opsForHash().get(ROOM_PREFIX + roomId, userId);
+		return fieldValue != null && !fieldValue.equals("0");
 	}
 
 

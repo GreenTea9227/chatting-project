@@ -35,6 +35,10 @@ public class RedisConfig {
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		// Value Serializer 설정
 		redisTemplate.setValueSerializer(new StringRedisSerializer());
+		redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+		redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+
+
 		redisTemplate.setConnectionFactory(redisConnectionFactory);
 
 		return redisTemplate;
