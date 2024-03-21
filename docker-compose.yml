@@ -1,0 +1,71 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - ./db/mysql/conf.d:/etc/mysql/conf.d
+      - ./db/mysql/data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=1111
+      - MYSQL_USER=john
+      - MYSQL_PASSWORD=1111
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./db/mongo/data:/data
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=john
+      - MONGO_INITDB_ROOT_PASSWORD=1111
+      - MONGO_INITDB_DATABASE=chat
+    command: mongod --auth
+  redis:
+    image: redis
+    volumes:
+      - ./db/redis:/usr/local/etc/redis
+    ports:
+      - "6379:6379"
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  zookeeper:
+    image: 'arm64v8/zookeeper:3.8'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_TLS_CLIENT_AUTH=none
+      - ZOO_TLS_QUORUM_CLIENT_AUTH=none
+
+  kafka:
+    image: bitnami/kafka:3.4.0
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENERS=LC://kafka:29092,LX://kafka:9092,CONTROLLER://:9093 # CONTROLLER 추가
+      - KAFKA_CFG_ADVERTISED_LISTENERS=LC://kafka:29092,LX://${DOCKER_HOST_IP:-localhost}:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=LC:PLAINTEXT,LX:PLAINTEXT,CONTROLLER:PLAINTEXT # CONTROLLER 추가
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=LC
+    depends_on:
+      - zookeeper
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8989:8080"
+    restart: always
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
