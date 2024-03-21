@@ -11,6 +11,9 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.kor.syh.chat.adapter.in.web.MessageDto;
+
 @Configuration
 public class KafkaConsumerConfig {
 	@Bean
@@ -27,13 +30,13 @@ public class KafkaConsumerConfig {
 	}
 
 	@Bean
-	public ConsumerFactory<String, String> consumerFactory() {
+	public ConsumerFactory<String, Object> consumerFactory() {
 		return new DefaultKafkaConsumerFactory<>(this.consumerConfig());
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, String> factory
+	public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, Object> factory
 			= new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(this.consumerFactory());
 		return factory;

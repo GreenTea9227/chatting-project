@@ -3,6 +3,7 @@ package com.kor.syh.chat.adapter.out.kafka;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import com.kor.syh.chat.application.port.out.kafka.KafkaMessageDto;
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
 import com.kor.syh.chat.domain.Message;
 import com.kor.syh.common.utils.JsonUtil;
@@ -17,6 +18,8 @@ public class KafkaMessageProducer implements ProduceMessageBrokerPort {
 
 	@Override
 	public void produce(String topic, Message message) {
-		kafkaTemplate.send(topic, JsonUtil.classToString(message));
+		KafkaMessageDto kafkaMessageDto = new KafkaMessageDto(message.getRoomId(), message.getSenderId(),
+			message.getContent(), message.getType());
+		kafkaTemplate.send(topic, JsonUtil.classToString(kafkaMessageDto));
 	}
 }
