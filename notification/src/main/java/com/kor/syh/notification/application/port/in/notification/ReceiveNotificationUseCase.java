@@ -1,7 +1,7 @@
 package com.kor.syh.notification.application.port.in.notification;
 
-import com.kor.syh.notification.adpater.in.channel.ReceiveMessage;
+import com.kor.syh.common.PublishNotificationDto;
 
 public interface ReceiveNotificationUseCase {
-	void receive(String receiver, ReceiveMessage command);
+	void receive(String receiver, PublishNotificationDto command);
 }

@@ -1,0 +1,20 @@
+server:
+  port: 8083
+
+custom:
+  kafka:
+    topic_id: chat
+    group_id: group_chat
+    server: localhost:9092
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://john:1111@localhost:27018/chat?authSource=admin
+
+redis:
+  host: localhost
+  port: 6379
+  password: 1111
+  database: 0
+
