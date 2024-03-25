@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kor.syh.common.CommonResponse;
+import com.kor.syh.members.port.in.auth.LoginMemberUseCase;
 import com.kor.syh.members.port.in.member.FindMemberResponse;
 import com.kor.syh.members.port.in.member.FindMemberUseCase;
 import com.kor.syh.members.port.in.member.RegisterMemberCommand;
@@ -21,6 +22,7 @@ public class MemberController {
 
 	private final RegisterMemberUseCase registerMemberUseCase;
 	private final FindMemberUseCase findMemberUseCase;
+	private final LoginMemberUseCase loginMemberUseCase;
 
 	@PostMapping("/register")
 	public CommonResponse<?> register(@RequestBody RegisterMemberRequest request) {
@@ -33,6 +35,14 @@ public class MemberController {
 		registerMemberUseCase.register(command);
 
 		return CommonResponse.success("가입 성공");
+	}
+
+	@PostMapping("/login")
+	public CommonResponse<?> login(@RequestBody LoginMemberRequest request) {
+
+		String memberId = loginMemberUseCase.login(request.getLoginId(), request.getPassword());
+
+		return CommonResponse.success(memberId,"로그인 성공");
 	}
 
 	@PostMapping("/find")
