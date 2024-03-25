@@ -9,3 +9,5 @@ spring:
     hibernate:
       ddl-auto: create
     generate-ddl: true
+server:
+  port: 8081
