@@ -37,15 +37,16 @@ public class TokenProvider {
 		this.key = Keys.hmacShaKeyFor(secretByteKey);
 	}
 
-	public String generateJwtToken(String userId) {
+	public String generateJwtToken(JwtCreateRequestDto dto) {
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + tokenValidityInSeconds);
 
 		return Jwts.builder()
-				   .setSubject(userId)
+				   .setSubject(dto.getId())
 				   .setIssuedAt(now)
 				   .setExpiration(expiryDate)
 				   .signWith(key, SignatureAlgorithm.HS512)
+				   .claim("username", dto.getUsername())
 				   .compact();
 	}
 

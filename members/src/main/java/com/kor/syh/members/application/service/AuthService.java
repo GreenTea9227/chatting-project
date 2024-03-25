@@ -2,6 +2,7 @@ package com.kor.syh.members.application.service;
 
 import org.springframework.stereotype.Service;
 
+import com.kor.syh.common.jwt.JwtCreateRequestDto;
 import com.kor.syh.common.jwt.TokenProvider;
 import com.kor.syh.members.domain.Member;
 import com.kor.syh.members.application.port.in.auth.LoginMemberUseCase;
@@ -18,6 +19,11 @@ public class AuthService implements LoginMemberUseCase {
 	@Override
 	public String login(String loginId, String password) {
 		Member member = findMemberPort.find(loginId, password);
-		return member.getId();
+		JwtCreateRequestDto requestDto = JwtCreateRequestDto.builder()
+													   .username(member.getUsername())
+													   .id(member.getId())
+													   .build();
+		return tokenProvider.generateJwtToken(requestDto);
+
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kor.syh.common.CommonResponse;
+import com.kor.syh.common.jwt.JwtToken;
 import com.kor.syh.members.application.port.in.auth.LoginMemberUseCase;
 import com.kor.syh.members.application.port.in.member.FindMemberResponse;
 import com.kor.syh.members.application.port.in.member.FindMemberUseCase;
@@ -40,9 +41,10 @@ public class MemberController {
 	@PostMapping("/login")
 	public CommonResponse<?> login(@RequestBody LoginMemberRequest request) {
 
-		String memberId = loginMemberUseCase.login(request.getLoginId(), request.getPassword());
+		String token = loginMemberUseCase.login(request.getLoginId(), request.getPassword());
+		JwtToken jwtToken = new JwtToken(token);
 
-		return CommonResponse.success(memberId,"로그인 성공");
+		return CommonResponse.success(jwtToken,"로그인 성공");
 	}
 
 	@PostMapping("/find")

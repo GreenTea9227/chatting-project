@@ -29,8 +29,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
 	@Autowired
 	private TokenProvider tokenProvider;
-	@Autowired
-	private ObjectMapper objectMapper;
 
 	public static class Config {
 	}
