@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Configuration;
 
 import com.kor.syh.filter.AuthorizationHeaderFilter;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Configuration
 public class FilterConfig {
 
 	private final AuthorizationHeaderFilter authorizationHeaderFilter;
-	public FilterConfig(AuthorizationHeaderFilter authorizationHeaderFilter) {
-		this.authorizationHeaderFilter = authorizationHeaderFilter;
-	}
 	@Bean
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
 		return builder.routes()
@@ -24,7 +24,7 @@ public class FilterConfig {
 					  .route(r -> r.path("/member/**")
 								   .filters(f -> f.filter(authorizationHeaderFilter.apply(new AuthorizationHeaderFilter.Config())))
 								   .uri("http://localhost:8081"))
-					  // Second-service
+					  // Chat-service
 					  .route(r -> r.path("/chat/**")
 								   .filters(f -> f.filter(authorizationHeaderFilter.apply(new AuthorizationHeaderFilter.Config())))
 								   .uri("http://localhost:8082"))
