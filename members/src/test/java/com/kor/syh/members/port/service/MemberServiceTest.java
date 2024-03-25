@@ -14,13 +14,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.kor.syh.members.application.out.exception.MemberNotFoundException;
+import com.kor.syh.members.adapter.out.exception.MemberNotFoundException;
+import com.kor.syh.members.application.service.MemberService;
 import com.kor.syh.members.domain.Member;
 import com.kor.syh.members.domain.MemberStatus;
-import com.kor.syh.members.port.in.member.FindMemberResponse;
-import com.kor.syh.members.port.in.member.RegisterMemberCommand;
-import com.kor.syh.members.port.out.member.FindMemberPort;
-import com.kor.syh.members.port.out.member.RegisterMemberPort;
+import com.kor.syh.members.application.port.in.member.FindMemberResponse;
+import com.kor.syh.members.application.port.in.member.RegisterMemberCommand;
+import com.kor.syh.members.application.port.out.member.FindMemberPort;
+import com.kor.syh.members.application.port.out.member.RegisterMemberPort;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
