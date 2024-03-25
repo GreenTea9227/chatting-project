@@ -26,7 +26,6 @@ public class MessageService implements HandleMessageUseCase {
 	private final ManageRoomParticipantPort roomPort;
 	private final SaveMessagePort saveMessagePort;
 	private final SendMessagePort sendMessagePort;
-	private final SendNotificationPort sendNotificationPort;
 
 	@Override
 	public void publishMessage(MessageDto messageDto) {
@@ -44,7 +43,7 @@ public class MessageService implements HandleMessageUseCase {
 
 		Message message = createMessage(messageDto);
 
-		saveMessagePort.save(message);
+		saveMessagePort.save(roomId,message);
 		produceMessageBrokerPort.produce(message);
 	}
 

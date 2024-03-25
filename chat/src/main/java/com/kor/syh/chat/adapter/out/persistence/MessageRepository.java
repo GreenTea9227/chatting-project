@@ -11,12 +11,12 @@ import lombok.RequiredArgsConstructor;
 @Repository
 public class MessageRepository implements SaveMessagePort {
 
-	private final SpringMongoMessageRepository springMongoMessageRepository;
+	private final SpringMongoRoomRepository springMongoRoomRepository;
 	private final MessageMapper mapper;
 
-	@Override
-	public void save(Message message) {
+	public void save(String roomId, Message message) {
 		MongoMessage mongoMessage = mapper.toMongoMessage(message);
-		springMongoMessageRepository.save(mongoMessage);
+		springMongoRoomRepository.addMessage(roomId, mongoMessage);
 	}
+
 }

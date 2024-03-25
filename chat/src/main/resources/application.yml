@@ -10,7 +10,7 @@ custom:
 spring:
   data:
     mongodb:
-      uri: mongodb://john:1111@localhost:27018/chat?authSource=admin
+      uri: mongodb://john:1111@localhost:27018/room?authSource=admin
 
 redis:
   host: localhost
