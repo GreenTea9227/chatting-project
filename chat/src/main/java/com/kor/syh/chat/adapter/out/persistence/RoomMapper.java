@@ -8,6 +8,7 @@ import com.kor.syh.chat.domain.Room;
 public class RoomMapper {
 
 	public Room mapToDomain(MongoRoom mongoRoom) {
+
 		return Room.builder()
 				   .roomId(mongoRoom.getRoomId())
 				   .cratedDate(mongoRoom.getCreateDate())
@@ -18,8 +19,6 @@ public class RoomMapper {
 	public MongoRoom mapToEntity(Room room) {
 		return MongoRoom.builder()
 						.roomId(room.getRoomId())
-						.createDate(room.getCratedDate())
-						.updateDate(room.getUpdatedDate())
 						.build();
 	}
 }

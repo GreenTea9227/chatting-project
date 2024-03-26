@@ -23,7 +23,7 @@ public class AuthService implements LoginMemberUseCase {
 	public String login(String loginId, String password) {
 		Member member = findMemberPort.findByLoginId(loginId);
 
-		if (!passwordEncoder.matches(member.getPassword(), password)) {
+		if (!passwordEncoder.matches( password,member.getPassword())) {
 			throw new PasswordMisMatchException("Password is not matched");
 		}
 

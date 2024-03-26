@@ -34,29 +34,42 @@ public class MessageInterceptor implements ChannelInterceptor {
 		switch (command) {
 			case CONNECT -> {
 				// 입장 메시지 전송
-
-				String authorizationHeader = String.valueOf(accessor.getNativeHeader("Authorization"));
-				if (authorizationHeader == null || authorizationHeader.equals("null")) {
-					throw new MessageDeliveryException("메세지 예외");
-				}
-				String token = authorizationHeader.substring(7);
-				if (!tokenProvider.isValidToken(token)) {
-					throw new TokenException("토큰 예외");
-				}
+				String token = extractToken(accessor);
 				String userId = tokenProvider.parseMemberIdFromToken(token);
 				UsernamePasswordAuthenticationToken authentication =
 					new UsernamePasswordAuthenticationToken(userId, null,
 						List.of(new SimpleGrantedAuthority("ROLE_USER")));
-				accessor.setUser(authentication);
-				log.info("입장");
 
+				accessor.setUser(authentication);
+			}
+			case SUBSCRIBE -> {
+				String roomId = getRoomId(accessor.getDestination());
+				String userId = accessor.getUser().getName();
+				log.info("유저 ID '{}'가 방 '{}'에 입장", userId, roomId);
 			}
 			case DISCONNECT -> {
-				// redis 방 컨트롤
-				log.info("퇴장");
+				String userId = accessor.getUser().getName();
+				log.info("유저 ID '{}' 퇴장", userId);
 			}
 		}
 		return message;
+	}
+
+	private String extractToken(StompHeaderAccessor accessor) {
+		String authorizationHeader = String.valueOf(accessor.getNativeHeader("Authorization"));
+		if (authorizationHeader == null || authorizationHeader.equals("null")) {
+			throw new MessageDeliveryException("메세지 예외");
+		}
+		String token = authorizationHeader.substring(7);
+		if (!tokenProvider.isValidToken(token)) {
+			throw new TokenException("토큰 예외");
+		}
+		return token;
+	}
+
+	private String getRoomId(String destination) {
+		int lastIndex = destination.lastIndexOf('/');
+		return lastIndex != -1 ? destination.substring(lastIndex + 1) : null;
 	}
 
 }

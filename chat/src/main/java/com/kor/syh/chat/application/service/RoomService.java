@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.f4b6a3.tsid.TsidCreator;
-import com.kor.syh.chat.adapter.out.web.RoomResponseDto;
+import com.kor.syh.chat.adapter.in.web.RoomResponseDto;
 import com.kor.syh.chat.application.port.in.ExitRoomUseCase;
 import com.kor.syh.chat.application.port.in.HandlerRoomUseCase;
 import com.kor.syh.chat.application.port.in.ParticipateRoomUseCase;
@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class RoomService implements HandlerRoomUseCase, ParticipateRoomUseCase, ExitRoomUseCase {
 	private final ManageRoomPort manageRoomPort;
 	private final ManageRoomParticipantPort manageRoomParticipantPort;
+
 	@Override
 	public RoomResponseDto createRoom(String userId) {
 		String roomId = TsidCreator.getTsid().toString();
@@ -28,21 +29,19 @@ public class RoomService implements HandlerRoomUseCase, ParticipateRoomUseCase, 
 						.creatorId(userId)
 						.build();
 		manageRoomPort.saveRoom(room);
-		manageRoomParticipantPort.createRoom(roomId,userId);
+		manageRoomParticipantPort.createRoom(roomId, userId);
 		return RoomResponseDto.of(roomId);
 	}
 
 	@Override
 	public void participate(String roomId, String userId) {
 		manageRoomParticipantPort.participate(roomId, userId);
-		//TODO notification 보내기
+		//TODO 1.밀린 메시지 가져오기 2.notification 보내기
 	}
-
 
 	@Override
 	public void exit(String roomId, String userId) {
 		manageRoomParticipantPort.exit(roomId, userId);
 	}
-
 
 }

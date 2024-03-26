@@ -1,4 +1,4 @@
-package com.kor.syh.chat.adapter.out.web;
+package com.kor.syh.chat.adapter.in.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

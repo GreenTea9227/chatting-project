@@ -61,7 +61,6 @@ services:
     container_name: kafka-ui
     ports:
       - "8989:8080"
-    restart: always
     depends_on:
       - kafka
       - zookeeper

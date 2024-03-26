@@ -10,7 +10,6 @@ public class MessageMapper {
 	public MongoMessage toMongoMessage(Message message) {
 		return MongoMessage.builder()
 						   .messageId(message.getMessageId())
-						   .roomId(message.getRoomId())
 						   .senderId(message.getSenderId())
 						   .content(message.getContent())
 						   .type(message.getType())
@@ -19,9 +18,9 @@ public class MessageMapper {
 	}
 
 	public Message toMessage(MongoMessage mongoMessage) {
+
 		return Message.builder()
 					  .messageId(mongoMessage.getMessageId())
-					  .roomId(mongoMessage.getRoomId())
 					  .senderId(mongoMessage.getSenderId())
 					  .content(mongoMessage.getContent())
 					  .type(mongoMessage.getType())

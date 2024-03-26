@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kor.syh.chat.adapter.out.web.RoomResponseDto;
 import com.kor.syh.chat.application.port.in.HandlerRoomUseCase;
 import com.kor.syh.common.CommonResponse;
 
@@ -24,4 +23,5 @@ public class RoomController {
 		RoomResponseDto roomResponseDto = handlerRoomUseCase.createRoom(userId);
 		return CommonResponse.success(roomResponseDto, "success");
 	}
+
 }

@@ -21,7 +21,6 @@ public class MemberRepository implements RegisterMemberPort, FindMemberPort {
 	@Override
 	public void register(Member member) {
 
-		//TODO password 암호화 필요
 		MemberJpaEntity jpaEntity = new MemberJpaEntity(
 			UUID.randomUUID().toString(),
 			member.getLoginId(),

@@ -12,8 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.f4b6a3.tsid.TsidCreator;
-import com.kor.syh.chat.adapter.out.web.RoomResponseDto;
+import com.kor.syh.chat.adapter.in.web.RoomResponseDto;
 import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
 import com.kor.syh.chat.application.port.out.ManageRoomPort;
 import com.kor.syh.chat.domain.Room;

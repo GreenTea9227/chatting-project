@@ -24,7 +24,7 @@ public class KafkaMessageConsumerAdapter implements ConsumeMessageBrokerPort {
 	@KafkaListener(topics = "chat")
 	public void consume(String message) {
 		KafkaMessageDto kafkaMessageDto = JsonUtil.stringToClass(message, KafkaMessageDto.class);
-		log.info(" message: {}", kafkaMessageDto);
+		log.info("message: {}", kafkaMessageDto);
 		MessageDto messageDto = new MessageDto(
 			kafkaMessageDto.getRoomId(),
 			kafkaMessageDto.getSenderId(),
