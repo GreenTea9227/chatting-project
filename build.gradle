@@ -37,9 +37,17 @@ subprojects {
     }
 }
 
+bootJar { enabled = false }
+jar { enabled = true }
+
 project(':core-api') {
     bootJar { enabled = false }
     jar { enabled = true }
+}
+
+project(':chat') {
+    bootJar { enabled = true }
+    jar { enabled = false }
 }
 
 project(':members') {

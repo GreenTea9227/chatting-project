@@ -100,14 +100,12 @@ class MessageServiceTest {
 		String userId = "userId";
 		String message = "message";
 		MessageDto messageDto = new MessageDto(roomId, userId, message, MessageType.SEND);
-		when(roomPort.isParticipatingNow(roomId, userId)).thenReturn(true);
 		doNothing().when(sendMessagePort).sendMessage(messageDto);
 
 		// when
 		messageService.sendMessageToUser(messageDto);
 
 		// then
-		verify(roomPort, times(1)).isParticipatingNow(roomId, userId);
 		verify(sendMessagePort, times(1)).sendMessage(messageDto);
 
 	}
