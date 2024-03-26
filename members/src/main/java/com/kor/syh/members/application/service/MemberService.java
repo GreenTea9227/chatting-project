@@ -1,8 +1,10 @@
 package com.kor.syh.members.application.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kor.syh.members.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.members.domain.Member;
 import com.kor.syh.members.domain.MemberStatus;
 import com.kor.syh.members.application.port.in.member.FindMemberResponse;
@@ -20,15 +22,16 @@ import lombok.RequiredArgsConstructor;
 public class MemberService implements RegisterMemberUseCase, FindMemberUseCase {
 	private final RegisterMemberPort registerMemberPort;
 	private final FindMemberPort findMemberPort;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public void register(RegisterMemberCommand command) {
-
+		String encodePassword = passwordEncoder.encode(command.getPassword());
 		Member member = Member.builder()
 							  .loginId(command.getLoginId())
 							  .status(MemberStatus.USER)
 							  .nickname(command.getNickname())
-							  .password(command.getPassword())
+							  .password(encodePassword)
 							  .username(command.getUsername())
 							  .build();
 
@@ -37,7 +40,10 @@ public class MemberService implements RegisterMemberUseCase, FindMemberUseCase {
 
 	@Override
 	public FindMemberResponse find(String loginId, String password) {
-		Member member = findMemberPort.find(loginId, password);
+		Member member = findMemberPort.findByLoginId(loginId);
+		if (!passwordEncoder.matches(member.getPassword(), password)) {
+			throw new PasswordMisMatchException("Password is not matched");
+		}
 
 		return new FindMemberResponse(
 			member.getId(),
