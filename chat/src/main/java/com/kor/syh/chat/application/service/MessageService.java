@@ -11,7 +11,6 @@ import com.kor.syh.chat.application.port.in.HandleMessageUseCase;
 import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
 import com.kor.syh.chat.application.port.out.SaveMessagePort;
 import com.kor.syh.chat.application.port.out.SendMessagePort;
-import com.kor.syh.chat.application.port.out.SendNotificationPort;
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
 import com.kor.syh.chat.domain.Message;
 
@@ -26,7 +25,6 @@ public class MessageService implements HandleMessageUseCase {
 	private final ManageRoomParticipantPort roomPort;
 	private final SaveMessagePort saveMessagePort;
 	private final SendMessagePort sendMessagePort;
-	private final SendNotificationPort sendNotificationPort;
 
 	@Override
 	public void publishMessage(MessageDto messageDto) {
@@ -44,22 +42,16 @@ public class MessageService implements HandleMessageUseCase {
 
 		Message message = createMessage(messageDto);
 
-		saveMessagePort.save(message);
+		saveMessagePort.save(roomId, message);
 		produceMessageBrokerPort.produce(message);
 	}
 
 	@Override
 	public void sendMessageToUser(MessageDto messageDto) {
-		String roomId = messageDto.getRoomId();
-		String senderId = messageDto.getSenderId();
+		sendMessagePort.sendMessage(messageDto);
 
-		if (roomPort.isParticipatingNow(roomId, senderId)) {
-			//send message
-			sendMessagePort.sendMessage(messageDto);
-		} else {
-			//notification TODO
-			//sendNotificationPort.sendNotification(messageDto.getRoomId(), messageDto.getContent());
-		}
+		//notification TODO
+		//sendNotificationPort.sendNotification(messageDto.getRoomId(), messageDto.getContent());
 
 	}
 
@@ -69,10 +61,10 @@ public class MessageService implements HandleMessageUseCase {
 		return Message.builder()
 					  .messageId(messageId)
 					  .content(messageDto.getContent())
-					  .createdDate(now)
 					  .roomId(messageDto.getRoomId())
 					  .senderId(messageDto.getSenderId())
 					  .type(messageDto.getType())
+					  .createdDate(now)
 					  .build();
 	}
 }

@@ -1,6 +1,4 @@
 ## #️⃣ Issue Number
 
-
-
 ## 🚩 Work Detail
 

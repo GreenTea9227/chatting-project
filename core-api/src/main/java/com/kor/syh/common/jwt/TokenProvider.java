@@ -18,11 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class TokenProvider {
-	private Key key;
 	private final String secretKey;
 	private final long tokenValidityInSeconds;
 	private final String secretKey2;
 	private final long tokenValidityInSeconds2;
+	private Key key;
 
 	public TokenProvider(
 		@Value("${jwt.secret}") String secretKey,
@@ -30,7 +30,7 @@ public class TokenProvider {
 		@Value("${jwt.secret2}") String secretKey2,
 		@Value("${jwt.token_validate_time2}") long tokenValidityInSeconds2) {
 		this.secretKey = secretKey;
-		this.tokenValidityInSeconds = tokenValidityInSeconds;
+		this.tokenValidityInSeconds = tokenValidityInSeconds * 1000;
 		this.secretKey2 = secretKey2;
 		this.tokenValidityInSeconds2 = tokenValidityInSeconds2;
 		byte[] secretByteKey = Decoders.BASE64.decode(secretKey);
@@ -75,15 +75,18 @@ public class TokenProvider {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			return true;
-		} catch (SecurityException | MalformedJwtException e) {
-			throw new SecurityException(e.getMessage());
-		} catch (ExpiredJwtException e) {
-			log.info("유효하지 않은 jwt_token입니다.");
-			throw new ExpiredJwtException(e.getHeader(), e.getClaims(), e.getMessage());
-		} catch (UnsupportedJwtException e) {
-			throw new UnsupportedJwtException(e.getMessage());
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException(e);
+		} catch (MalformedJwtException ex) {
+			log.error("Invalid JWT token");
+			throw ex;
+		} catch (ExpiredJwtException ex) {
+			log.error("Expired JWT token");
+			throw ex;
+		} catch (UnsupportedJwtException ex) {
+			log.error("Unsupported JWT token");
+			throw ex;
+		} catch (IllegalArgumentException ex) {
+			log.error("JWT claims string is empty.");
+			throw ex;
 		}
 	}
 

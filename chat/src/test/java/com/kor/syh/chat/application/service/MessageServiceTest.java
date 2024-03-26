@@ -45,7 +45,7 @@ class MessageServiceTest {
 		when(roomPort.isChatRoomExists(roomId)).thenReturn(true);
 		when(roomPort.isRoomParticipant(roomId, userId)).thenReturn(true);
 
-		doNothing().when(saveMessagePort).save(any(Message.class));
+		doNothing().when(saveMessagePort).save(eq(roomId), any(Message.class));
 		doNothing().when(produceMessageBrokerPort).produce(any(Message.class));
 
 		// when
@@ -53,7 +53,7 @@ class MessageServiceTest {
 
 		// then
 		verify(roomPort, times(1)).isRoomParticipant(roomId, userId);
-		verify(saveMessagePort, times(1)).save(any(Message.class));
+		verify(saveMessagePort, times(1)).save(eq(roomId), any(Message.class));
 		verify(produceMessageBrokerPort, times(1)).produce(any(Message.class));
 	}
 
@@ -100,14 +100,12 @@ class MessageServiceTest {
 		String userId = "userId";
 		String message = "message";
 		MessageDto messageDto = new MessageDto(roomId, userId, message, MessageType.SEND);
-		when(roomPort.isParticipatingNow(roomId, userId)).thenReturn(true);
 		doNothing().when(sendMessagePort).sendMessage(messageDto);
 
 		// when
 		messageService.sendMessageToUser(messageDto);
 
 		// then
-		verify(roomPort, times(1)).isParticipatingNow(roomId, userId);
 		verify(sendMessagePort, times(1)).sendMessage(messageDto);
 
 	}

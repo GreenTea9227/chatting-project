@@ -44,7 +44,7 @@ public class MemberController {
 		String token = loginMemberUseCase.login(request.getLoginId(), request.getPassword());
 		JwtToken jwtToken = new JwtToken(token);
 
-		return CommonResponse.success(jwtToken,"로그인 성공");
+		return CommonResponse.success(jwtToken, "로그인 성공");
 	}
 
 	@PostMapping("/find")

@@ -5,3 +5,7 @@ redis:
 
 server:
   port: 8083
+
+spring:
+  profiles:
+    include: common

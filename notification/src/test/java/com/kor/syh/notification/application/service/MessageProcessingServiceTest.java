@@ -22,7 +22,6 @@ import com.kor.syh.notification.application.port.out.channel.MessagePublishPort;
 import com.kor.syh.notification.application.port.out.channel.SendMessage;
 import com.kor.syh.notification.application.port.out.notification.NotificationPersistencePort;
 
-
 @SpringBootTest
 class MessageProcessingServiceTest {
 

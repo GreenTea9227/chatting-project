@@ -13,15 +13,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.kor.syh.members.adapter.out.exception.MemberNotFoundException;
-import com.kor.syh.members.application.service.MemberService;
-import com.kor.syh.members.domain.Member;
-import com.kor.syh.members.domain.MemberStatus;
 import com.kor.syh.members.application.port.in.member.FindMemberResponse;
 import com.kor.syh.members.application.port.in.member.RegisterMemberCommand;
 import com.kor.syh.members.application.port.out.member.FindMemberPort;
 import com.kor.syh.members.application.port.out.member.RegisterMemberPort;
+import com.kor.syh.members.application.service.MemberService;
+import com.kor.syh.members.domain.Member;
+import com.kor.syh.members.domain.MemberStatus;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
@@ -30,6 +31,8 @@ class MemberServiceTest {
 	private RegisterMemberPort registerMemberPort;
 	@Mock
 	private FindMemberPort findMemberPort;
+	@Mock
+	private PasswordEncoder passwordEncoder;
 
 	@InjectMocks
 	private MemberService memberService;
@@ -42,6 +45,7 @@ class MemberServiceTest {
 			new RegisterMemberCommand("loginId", "password", "username", "nickname");
 
 		doNothing().when(registerMemberPort).register(any(Member.class));
+		when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
 		// when
 		memberService.register(command);
@@ -71,7 +75,8 @@ class MemberServiceTest {
 				LocalDateTime.now()
 			);
 
-			when(findMemberPort.find(loginId, password)).thenReturn(member);
+			when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
+			when(passwordEncoder.matches(password, member.getPassword())).thenReturn(true);
 
 			// when
 			FindMemberResponse findMemberResponse = memberService.find(loginId, password);
@@ -93,7 +98,7 @@ class MemberServiceTest {
 			// given
 			String loginId = "loginId";
 			String password = "password";
-			doThrow(new MemberNotFoundException()).when(findMemberPort).find(anyString(), anyString());
+			doThrow(new MemberNotFoundException()).when(findMemberPort).findByLoginId(anyString());
 
 			// when , then
 			assertThatThrownBy(() -> memberService.find(loginId, password))

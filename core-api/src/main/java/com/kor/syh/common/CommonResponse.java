@@ -14,7 +14,7 @@ public class CommonResponse<T> {
 	private final T data;
 	private final String message;
 
-	public static <T> CommonResponse<T> success(T data,String message) {
+	public static <T> CommonResponse<T> success(T data, String message) {
 		return CommonResponse.of(SUCCESS_STATUS, data, null);
 	}
 
@@ -22,15 +22,15 @@ public class CommonResponse<T> {
 		return CommonResponse.of(SUCCESS_STATUS, null, message);
 	}
 
-
-	public static <T> CommonResponse<T> fail(T data,String message) {
+	public static <T> CommonResponse<T> fail(T data, String message) {
 		return CommonResponse.of(FAIL_STATUS, data, message);
 	}
 
-	public static  CommonResponse<?> fail(String message) {
+	public static CommonResponse<?> fail(String message) {
 		return CommonResponse.of(FAIL_STATUS, null, message);
 	}
-	public static <T> CommonResponse<T> error(T data,String message) {
+
+	public static <T> CommonResponse<T> error(T data, String message) {
 		return CommonResponse.of(ERROR_STATUS, data, message);
 	}
 

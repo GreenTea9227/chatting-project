@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 import com.kor.syh.members.adapter.out.exception.MemberNotFoundException;
-import com.kor.syh.members.domain.Member;
 import com.kor.syh.members.application.port.out.member.FindMemberPort;
 import com.kor.syh.members.application.port.out.member.RegisterMemberPort;
+import com.kor.syh.members.domain.Member;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,6 @@ public class MemberRepository implements RegisterMemberPort, FindMemberPort {
 	@Override
 	public void register(Member member) {
 
-		//TODO password 암호화 필요
 		MemberJpaEntity jpaEntity = new MemberJpaEntity(
 			UUID.randomUUID().toString(),
 			member.getLoginId(),
@@ -33,8 +32,8 @@ public class MemberRepository implements RegisterMemberPort, FindMemberPort {
 	}
 
 	@Override
-	public Member find(String loginId, String password) {
-		MemberJpaEntity jpaEntity = memberRepository.findByLoginIdAndPassword(loginId, password)
+	public Member findByLoginId(String loginId) {
+		MemberJpaEntity jpaEntity = memberRepository.findByLoginId(loginId)
 													.orElseThrow(MemberNotFoundException::new);
 
 		return mapper.toDomain(jpaEntity);
