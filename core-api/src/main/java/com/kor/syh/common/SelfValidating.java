@@ -2,8 +2,6 @@ package com.kor.syh.common;
 
 import java.util.Set;
 
-
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
@@ -19,9 +17,8 @@ public abstract class SelfValidating<T> {
 		validator = factory.getValidator();
 	}
 
-
 	protected void validateSelf() {
-		Set<ConstraintViolation<T>> violations = validator.validate((T) this);
+		Set<ConstraintViolation<T>> violations = validator.validate((T)this);
 		if (!violations.isEmpty()) {
 			throw new ConstraintViolationException(violations);
 		}

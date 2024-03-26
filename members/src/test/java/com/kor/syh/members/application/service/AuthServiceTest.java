@@ -23,9 +23,9 @@ class AuthServiceTest {
 	@InjectMocks
 	private AuthService authService;
 	@Mock
-	private  FindMemberPort findMemberPort;
+	private FindMemberPort findMemberPort;
 	@Mock
-	private  TokenProvider tokenProvider;
+	private TokenProvider tokenProvider;
 	@Mock
 	private PasswordEncoder passwordEncoder;
 
@@ -42,7 +42,7 @@ class AuthServiceTest {
 							  .username(username)
 							  .build();
 		when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
-		when(passwordEncoder.matches(password,member.getPassword())).thenReturn(true);
+		when(passwordEncoder.matches(password, member.getPassword())).thenReturn(true);
 		String jwtToken = "jwt-token-value";
 		when(tokenProvider.generateJwtToken(any(JwtCreateRequestDto.class))).thenReturn(jwtToken);
 		// when
@@ -66,13 +66,12 @@ class AuthServiceTest {
 							  .username(username)
 							  .build();
 		when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
-		when(passwordEncoder.matches(password,member.getPassword())).thenReturn(false);
+		when(passwordEncoder.matches(password, member.getPassword())).thenReturn(false);
 
 		// when
 
 		assertThatThrownBy(() -> authService.login(loginId, password))
 			.isInstanceOf(PasswordMisMatchException.class);
-
 
 	}
 

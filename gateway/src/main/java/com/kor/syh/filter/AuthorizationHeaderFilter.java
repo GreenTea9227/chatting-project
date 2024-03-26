@@ -13,12 +13,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kor.syh.common.CommonResponse;
 import com.kor.syh.common.jwt.TokenException;
 import com.kor.syh.common.jwt.TokenProvider;
 import com.kor.syh.common.utils.JsonUtil;
-
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -29,9 +27,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
 	@Autowired
 	private TokenProvider tokenProvider;
-
-	public static class Config {
-	}
 
 	public AuthorizationHeaderFilter() {
 		super(Config.class);
@@ -47,8 +42,8 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 					if (tokenProvider.isValidToken(token)) {
 						String userId = tokenProvider.parseMemberIdFromToken(token);
 						exchange.getRequest().mutate()
-							   .header("X-Authorization-Id", userId)
-							   .build();
+								.header("X-Authorization-Id", userId)
+								.build();
 						return chain.filter(exchange); // Token is valid, continue to the next filter
 					}
 				} catch (TokenException e) {
@@ -67,6 +62,9 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 		String responseStr = JsonUtil.classToString(CommonResponse.fail("권한 없음"));
 		DataBuffer dataBuffer = dataBufferFactory.wrap(responseStr.getBytes(StandardCharsets.UTF_8));
 		return exchange.getResponse().writeWith(Mono.just(dataBuffer));
+	}
+
+	public static class Config {
 	}
 
 }

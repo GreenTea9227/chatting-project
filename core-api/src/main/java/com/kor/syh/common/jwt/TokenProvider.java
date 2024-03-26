@@ -18,11 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class TokenProvider {
-	private Key key;
 	private final String secretKey;
 	private final long tokenValidityInSeconds;
 	private final String secretKey2;
 	private final long tokenValidityInSeconds2;
+	private Key key;
 
 	public TokenProvider(
 		@Value("${jwt.secret}") String secretKey,

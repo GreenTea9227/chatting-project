@@ -23,7 +23,7 @@ public class MessageController {
 	private final ExitRoomUseCase exitRoomUseCase;
 
 	@MessageMapping("/chat/{roomId}")
-	public void send(@DestinationVariable("roomId") String roomId, MessageDto message ) {
+	public void send(@DestinationVariable("roomId") String roomId, MessageDto message) {
 
 		log.info("roomId: {} , send message : {}", roomId, message);
 		handleMessageUseCase.publishMessage(message);

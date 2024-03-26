@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 import com.kor.syh.members.adapter.out.exception.MemberNotFoundException;
-import com.kor.syh.members.domain.Member;
 import com.kor.syh.members.application.port.out.member.FindMemberPort;
 import com.kor.syh.members.application.port.out.member.RegisterMemberPort;
+import com.kor.syh.members.domain.Member;
 
 import lombok.RequiredArgsConstructor;
 

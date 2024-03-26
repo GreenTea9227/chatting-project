@@ -1,7 +1,6 @@
 package com.kor.syh.chat.adapter.in.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import com.kor.syh.chat.adapter.in.web.MessageDto;

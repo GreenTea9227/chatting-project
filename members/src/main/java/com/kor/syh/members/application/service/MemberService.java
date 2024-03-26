@@ -5,14 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kor.syh.members.adapter.out.exception.PasswordMisMatchException;
-import com.kor.syh.members.domain.Member;
-import com.kor.syh.members.domain.MemberStatus;
 import com.kor.syh.members.application.port.in.member.FindMemberResponse;
 import com.kor.syh.members.application.port.in.member.FindMemberUseCase;
 import com.kor.syh.members.application.port.in.member.RegisterMemberCommand;
 import com.kor.syh.members.application.port.in.member.RegisterMemberUseCase;
 import com.kor.syh.members.application.port.out.member.FindMemberPort;
 import com.kor.syh.members.application.port.out.member.RegisterMemberPort;
+import com.kor.syh.members.domain.Member;
+import com.kor.syh.members.domain.MemberStatus;
 
 import lombok.RequiredArgsConstructor;
 

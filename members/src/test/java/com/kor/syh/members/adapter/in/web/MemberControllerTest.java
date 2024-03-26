@@ -48,6 +48,15 @@ class MemberControllerTest {
 	@DisplayName("회원 가입")
 	@Nested
 	class RegisterTest {
+		static Stream<Arguments> failRegisterMemberData() {
+			return Stream.of(
+				Arguments.of("", "password", "username", "nickname", "userId 누락"),
+				Arguments.of("userId", "", "username", "nickname", "password 누락"),
+				Arguments.of("userId", "password", "", "nickname", "username 누락"),
+				Arguments.of("userId", "password", "username", "", "nickname 누락")
+			);
+		}
+
 		@DisplayName("회원 가입 성공")
 		@Test
 		void success_register() throws Exception {
@@ -90,15 +99,6 @@ class MemberControllerTest {
 				.content(requestStr)))
 				.hasCauseInstanceOf(ConstraintViolationException.class);
 
-		}
-
-		static Stream<Arguments> failRegisterMemberData() {
-			return Stream.of(
-				Arguments.of("", "password", "username", "nickname", "userId 누락"),
-				Arguments.of("userId", "", "username", "nickname", "password 누락"),
-				Arguments.of("userId", "password", "", "nickname", "username 누락"),
-				Arguments.of("userId", "password", "username", "", "nickname 누락")
-			);
 		}
 	}
 

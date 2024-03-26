@@ -16,13 +16,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.kor.syh.members.adapter.out.exception.MemberNotFoundException;
-import com.kor.syh.members.application.service.MemberService;
-import com.kor.syh.members.domain.Member;
-import com.kor.syh.members.domain.MemberStatus;
 import com.kor.syh.members.application.port.in.member.FindMemberResponse;
 import com.kor.syh.members.application.port.in.member.RegisterMemberCommand;
 import com.kor.syh.members.application.port.out.member.FindMemberPort;
 import com.kor.syh.members.application.port.out.member.RegisterMemberPort;
+import com.kor.syh.members.application.service.MemberService;
+import com.kor.syh.members.domain.Member;
+import com.kor.syh.members.domain.MemberStatus;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {

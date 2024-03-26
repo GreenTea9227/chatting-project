@@ -1,6 +1,6 @@
 package com.kor.syh.common.jwt;
 
-public class TokenException extends RuntimeException{
+public class TokenException extends RuntimeException {
 	public TokenException() {
 		super();
 	}

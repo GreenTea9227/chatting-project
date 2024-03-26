@@ -1,6 +1,6 @@
 package com.kor.syh.chat.application.service;
 
-public class MessageDeliveryException extends RuntimeException  {
+public class MessageDeliveryException extends RuntimeException {
 	public MessageDeliveryException() {
 		super();
 	}
