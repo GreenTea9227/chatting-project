@@ -5,7 +5,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.f4b6a3.tsid.TsidCreator;
 import com.kor.syh.chat.adapter.out.web.RoomResponseDto;
+import com.kor.syh.chat.application.port.in.ExitRoomUseCase;
 import com.kor.syh.chat.application.port.in.HandlerRoomUseCase;
+import com.kor.syh.chat.application.port.in.ParticipateRoomUseCase;
 import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
 import com.kor.syh.chat.application.port.out.ManageRoomPort;
 import com.kor.syh.chat.domain.Room;
@@ -15,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class RoomService implements HandlerRoomUseCase {
+public class RoomService implements HandlerRoomUseCase, ParticipateRoomUseCase, ExitRoomUseCase {
 	private final ManageRoomPort manageRoomPort;
 	private final ManageRoomParticipantPort manageRoomParticipantPort;
 	@Override
@@ -28,6 +30,19 @@ public class RoomService implements HandlerRoomUseCase {
 		manageRoomPort.saveRoom(room);
 		manageRoomParticipantPort.createRoom(roomId,userId);
 		return RoomResponseDto.of(roomId);
-
 	}
+
+	@Override
+	public void participate(String roomId, String userId) {
+		manageRoomParticipantPort.participate(roomId, userId);
+		//TODO notification 보내기
+	}
+
+
+	@Override
+	public void exit(String roomId, String userId) {
+		manageRoomParticipantPort.exit(roomId, userId);
+	}
+
+
 }

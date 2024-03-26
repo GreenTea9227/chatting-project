@@ -14,23 +14,29 @@ import lombok.RequiredArgsConstructor;
 public class FilterConfig {
 
 	private final AuthorizationHeaderFilter authorizationHeaderFilter;
+
 	@Bean
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
 		return builder.routes()
 					  // Login 및 Register
 					  .route(r -> r.path("/member/login", "/member/register")
 								   .uri("http://localhost:8081"))
+					  .route(r -> r.path("/ws/**")
+								   .uri("ws://localhost:8082"))
 					  // 다른 Member 서비스 경로에 커스텀 필터 적용
 					  .route(r -> r.path("/member/**")
-								   .filters(f -> f.filter(authorizationHeaderFilter.apply(new AuthorizationHeaderFilter.Config())))
+								   .filters(f -> f.filter(
+									   authorizationHeaderFilter.apply(new AuthorizationHeaderFilter.Config())))
 								   .uri("http://localhost:8081"))
 					  // Chat-service
-					  .route(r -> r.path("/chat/**")
-								   .filters(f -> f.filter(authorizationHeaderFilter.apply(new AuthorizationHeaderFilter.Config())))
+					  .route(r -> r.path("/chat/**", "/room/**")
+								   .filters(f -> f.filter(
+									   authorizationHeaderFilter.apply(new AuthorizationHeaderFilter.Config())))
 								   .uri("http://localhost:8082"))
 					  // Notification-service
 					  .route(r -> r.path("/notification/**")
-								   .filters(f -> f.filter(authorizationHeaderFilter.apply(new AuthorizationHeaderFilter.Config())))
+								   .filters(f -> f.filter(
+									   authorizationHeaderFilter.apply(new AuthorizationHeaderFilter.Config())))
 								   .uri("http://localhost:8083"))
 					  .build();
 	}

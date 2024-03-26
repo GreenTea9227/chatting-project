@@ -17,7 +17,17 @@ public class ManageRoomAdapter implements ManageRoomParticipantPort {
 
 	@Override
 	public void createRoom(String roomId, String userId) {
-		redisTemplate.opsForHash().put(ROOM_PREFIX+roomId,userId,1);
+		redisTemplate.opsForHash().put(ROOM_PREFIX+roomId,userId,"0");
+	}
+
+	@Override
+	public void participate(String roomId, String userId) {
+		redisTemplate.opsForHash().put(ROOM_PREFIX+roomId,userId,"1");
+	}
+
+	@Override
+	public void exit(String roomId, String userId) {
+		redisTemplate.opsForHash().put(ROOM_PREFIX+roomId,userId,0);
 	}
 
 	@Override

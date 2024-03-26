@@ -45,6 +45,10 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 				String token = authorizationHeader.substring(7);
 				try {
 					if (tokenProvider.isValidToken(token)) {
+						String userId = tokenProvider.parseMemberIdFromToken(token);
+						exchange.getRequest().mutate()
+							   .header("X-Authorization-Id", userId)
+							   .build();
 						return chain.filter(exchange); // Token is valid, continue to the next filter
 					}
 				} catch (TokenException e) {

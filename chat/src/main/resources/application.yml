@@ -8,6 +8,8 @@ custom:
     server: localhost:9092
 
 spring:
+  profiles:
+    include: common
   data:
     mongodb:
       uri: mongodb://john:1111@localhost:27018/room?authSource=admin

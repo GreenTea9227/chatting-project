@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class KafkaMessageConsumerAdapter implements ConsumeMessageBrokerPort {
 
-	private final SimpMessagingTemplate simpMessagingTemplate;
 	private final HandleMessageUseCase handleMessageUseCase;
 
 	@Override
