@@ -3,7 +3,8 @@ dependencies {
     implementation project(":core-api")
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
+    // ID generator
+    implementation 'com.github.f4b6a3:tsid-creator:5.2.6'
     implementation 'org.springframework.security:spring-security-crypto:6.2.1'
 
     implementation("org.springframework.boot:spring-boot-starter-data-redis")

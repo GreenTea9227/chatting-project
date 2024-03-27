@@ -7,20 +7,25 @@ import com.kor.syh.common.jwt.JwtCreateRequestDto;
 import com.kor.syh.common.jwt.TokenProvider;
 import com.kor.syh.members.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.members.application.port.in.auth.LoginMemberUseCase;
+import com.kor.syh.members.application.port.in.auth.LogoutMemberUseCase;
 import com.kor.syh.members.application.port.out.member.FindMemberPort;
-import com.kor.syh.members.application.port.out.member.LoginMemberPort;
+import com.kor.syh.members.application.port.out.member.LoginStatusPort;
+import com.kor.syh.members.application.port.out.member.LogoutStatusPort;
+import com.kor.syh.members.application.port.out.member.TokenStoragePort;
 import com.kor.syh.members.domain.Member;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class AuthService implements LoginMemberUseCase {
+public class AuthService implements LoginMemberUseCase, LogoutMemberUseCase {
 
 	private final FindMemberPort findMemberPort;
 	private final TokenProvider tokenProvider;
 	private final PasswordEncoder passwordEncoder;
-	private final LoginMemberPort loginMemberPort;
+	private final TokenStoragePort tokenStoragePort;
+	private final LoginStatusPort loginStatusPort;
+	private final LogoutStatusPort logoutStatusPort;
 
 
 	@Override
@@ -31,13 +36,26 @@ public class AuthService implements LoginMemberUseCase {
 			throw new PasswordMisMatchException("Password is not matched");
 		}
 
-		loginMemberPort.login(member.getId(), clientIp);
+
 		JwtCreateRequestDto requestDto = JwtCreateRequestDto.builder()
 															.username(member.getUsername())
 															.id(member.getId())
 															.build();
+		String token = tokenProvider.generateJwtToken(requestDto);
 
-		return tokenProvider.generateJwtToken(requestDto);
+		//TODO 사용자 기기 정보 식별
+		tokenStoragePort.saveToken(member.getId(),token);
+		loginStatusPort.login(member.getId(), clientIp);
+
+		return token;
+
+	}
+
+	@Override
+	public void logout(String userId, String clientIp) {
+
+		tokenStoragePort.deleteToken(userId);
+		logoutStatusPort.logout(userId, clientIp);
 
 	}
 }

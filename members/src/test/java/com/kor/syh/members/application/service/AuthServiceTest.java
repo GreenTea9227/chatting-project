@@ -15,7 +15,7 @@ import com.kor.syh.common.jwt.JwtCreateRequestDto;
 import com.kor.syh.common.jwt.TokenProvider;
 import com.kor.syh.members.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.members.application.port.out.member.FindMemberPort;
-import com.kor.syh.members.application.port.out.member.LoginMemberPort;
+import com.kor.syh.members.application.port.out.member.LoginStatusPort;
 import com.kor.syh.members.domain.Member;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +28,7 @@ class AuthServiceTest {
 	@Mock
 	private TokenProvider tokenProvider;
 	@Mock
-	private LoginMemberPort loginMemberPort;
+	private LoginStatusPort loginStatusPort;
 	@Mock
 	private PasswordEncoder passwordEncoder;
 
@@ -47,7 +47,7 @@ class AuthServiceTest {
 							  .build();
 		when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
 		when(passwordEncoder.matches(password, member.getPassword())).thenReturn(true);
-		doNothing().when(loginMemberPort).login(any(),any());
+		doNothing().when(loginStatusPort).login(any(),any());
 		String jwtToken = "jwt-token-value";
 		when(tokenProvider.generateJwtToken(any(JwtCreateRequestDto.class))).thenReturn(jwtToken);
 		// when
