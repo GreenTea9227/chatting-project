@@ -7,4 +7,5 @@ import lombok.NoArgsConstructor;
 public class RedisKey {
 	public static final String TOPIC_PREFIX = "topic:";
 	public static final String ROOM_PREFIX = "room:";
+	public static final String LOGIN_PREFIX = "login:";
 }

@@ -15,6 +15,7 @@ import com.kor.syh.common.jwt.JwtCreateRequestDto;
 import com.kor.syh.common.jwt.TokenProvider;
 import com.kor.syh.members.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.members.application.port.out.member.FindMemberPort;
+import com.kor.syh.members.application.port.out.member.LoginMemberPort;
 import com.kor.syh.members.domain.Member;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +28,8 @@ class AuthServiceTest {
 	@Mock
 	private TokenProvider tokenProvider;
 	@Mock
+	private LoginMemberPort loginMemberPort;
+	@Mock
 	private PasswordEncoder passwordEncoder;
 
 	@DisplayName("로그인 인증 성공")
@@ -36,6 +39,7 @@ class AuthServiceTest {
 		String loginId = "loginId";
 		String password = "1111";
 		String username = "user1";
+		String ip ="0.0.0.0";
 		Member member = Member.builder()
 							  .loginId(loginId)
 							  .password(password)
@@ -43,11 +47,12 @@ class AuthServiceTest {
 							  .build();
 		when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
 		when(passwordEncoder.matches(password, member.getPassword())).thenReturn(true);
+		doNothing().when(loginMemberPort).login(any(),any());
 		String jwtToken = "jwt-token-value";
 		when(tokenProvider.generateJwtToken(any(JwtCreateRequestDto.class))).thenReturn(jwtToken);
 		// when
 
-		String responseJwt = authService.login(loginId, password);
+		String responseJwt = authService.login(loginId, password,ip);
 
 		// then
 		assertThat(responseJwt).isEqualTo(jwtToken);
@@ -60,6 +65,7 @@ class AuthServiceTest {
 		String loginId = "loginId";
 		String password = "1111";
 		String username = "user1";
+		String ip ="0.0.0.0";
 		Member member = Member.builder()
 							  .loginId(loginId)
 							  .password(password)
@@ -68,9 +74,10 @@ class AuthServiceTest {
 		when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
 		when(passwordEncoder.matches(password, member.getPassword())).thenReturn(false);
 
+
 		// when
 
-		assertThatThrownBy(() -> authService.login(loginId, password))
+		assertThatThrownBy(() -> authService.login(loginId, password,ip))
 			.isInstanceOf(PasswordMisMatchException.class);
 
 	}

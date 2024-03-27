@@ -115,7 +115,7 @@ class MemberControllerTest {
 			String requestStr = objectMapper.writeValueAsString(request);
 
 			String jwtToken = "jwt-token-value";
-			when(loginMemberUseCase.login(loginId, password)).thenReturn(jwtToken);
+			when(loginMemberUseCase.login(eq(loginId), eq(password),any())).thenReturn(jwtToken);
 
 			// when
 			ResultActions perform = mvc.perform(post("/member/login")
@@ -137,9 +137,10 @@ class MemberControllerTest {
 			// given
 			String password = "1111";
 			String loginId = "loginId";
+			String ip = "0.0.0.0";
 			LoginMemberRequest request = new LoginMemberRequest(loginId, password);
 			String requestStr = objectMapper.writeValueAsString(request);
-			when(loginMemberUseCase.login(request.getLoginId(), request.getPassword())).thenThrow(
+			when(loginMemberUseCase.login(eq(request.getLoginId()), eq(request.getPassword()),any())).thenThrow(
 				MemberNotFoundException.class);
 
 			// when, then

@@ -12,7 +12,9 @@ import com.kor.syh.members.application.port.in.member.FindMemberResponse;
 import com.kor.syh.members.application.port.in.member.FindMemberUseCase;
 import com.kor.syh.members.application.port.in.member.RegisterMemberCommand;
 import com.kor.syh.members.application.port.in.member.RegisterMemberUseCase;
+import com.kor.syh.members.utils.HttpRequestUtils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -39,16 +41,17 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public CommonResponse<?> login(@RequestBody LoginMemberRequest request) {
-
-		String token = loginMemberUseCase.login(request.getLoginId(), request.getPassword());
+	public CommonResponse<?> login(@RequestBody LoginMemberRequest request, HttpServletRequest httpServletRequest) {
+		String clientIp = HttpRequestUtils.getClientIp(httpServletRequest);
+		String token = loginMemberUseCase.login(request.getLoginId(), request.getPassword(),clientIp);
 		JwtToken jwtToken = new JwtToken(token);
 
 		return CommonResponse.success(jwtToken, "로그인 성공");
 	}
 
 	@PostMapping("/find")
-	public CommonResponse<FindMemberResponse> find(@Valid @RequestBody FindMemberRequest request) {
+	public CommonResponse<FindMemberResponse> find(@Valid @RequestBody FindMemberRequest request, HttpServletRequest httpServletRequest) {
+
 		FindMemberResponse findMemberResponse = findMemberUseCase.find(request.getLoginId(), request.getPassword());
 
 		return CommonResponse.of("success", findMemberResponse, null);
