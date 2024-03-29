@@ -6,7 +6,7 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
-import com.kor.syh.common.PublishNotificationDto;
+import com.kor.syh.common.RedisPubSubNotification;
 import com.kor.syh.common.utils.JsonUtil;
 import com.kor.syh.notification.application.port.in.notification.ReceiveNotificationUseCase;
 import com.kor.syh.notification.util.TopicUtils;
@@ -26,7 +26,7 @@ public class RedisSubscriber implements MessageListener {
 
 		String fullTopicName = new String(message.getChannel(), StandardCharsets.UTF_8);
 		String receiver = TopicUtils.extractTopic(fullTopicName);
-		PublishNotificationDto receiveMessage = JsonUtil.byteToClass(message.getBody(), PublishNotificationDto.class);
+		RedisPubSubNotification receiveMessage = JsonUtil.byteToClass(message.getBody(), RedisPubSubNotification.class);
 
 		receiveNotification.receive(receiver, receiveMessage);
 	}

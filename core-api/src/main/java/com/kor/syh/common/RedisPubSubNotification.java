@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class PublishNotificationDto {
+public class RedisPubSubNotification {
 	private String id;
 	private NotifyType type;
 	private String senderId;
