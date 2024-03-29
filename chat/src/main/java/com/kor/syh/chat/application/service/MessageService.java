@@ -42,7 +42,7 @@ public class MessageService implements HandleMessageUseCase {
 
 		Message message = createMessage(messageDto);
 
-		saveMessagePort.save(roomId, message);
+		saveMessagePort.save(message);
 		produceMessageBrokerPort.produce(message);
 	}
 

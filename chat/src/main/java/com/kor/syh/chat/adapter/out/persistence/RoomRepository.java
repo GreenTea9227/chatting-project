@@ -15,8 +15,8 @@ public class RoomRepository implements ManageRoomPort {
 
 	@Override
 	public void saveRoom(Room room) {
-		MongoRoom mongoRoom = roomMapper.mapToEntity(room);
-		springMongoRoomRepository.save(mongoRoom);
+		RoomDocument roomDocument = roomMapper.toEntity(room);
+		springMongoRoomRepository.save(roomDocument);
 	}
 
 	@Override

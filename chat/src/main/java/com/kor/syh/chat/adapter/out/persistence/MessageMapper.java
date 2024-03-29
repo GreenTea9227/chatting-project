@@ -1,5 +1,6 @@
 package com.kor.syh.chat.adapter.out.persistence;
 
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 import com.kor.syh.chat.domain.Message;
@@ -7,24 +8,24 @@ import com.kor.syh.chat.domain.Message;
 @Component
 public class MessageMapper {
 
-	public MongoMessage toMongoMessage(Message message) {
-		return MongoMessage.builder()
-						   .messageId(message.getMessageId())
-						   .senderId(message.getSenderId())
-						   .content(message.getContent())
-						   .type(message.getType())
-						   .createdDate(message.getCreatedDate())
-						   .build();
+	public MessageDocument toEntity( Message message) {
+
+		return MessageDocument.builder()
+							  .roomId(message.getRoomId())
+							  .senderId(message.getSenderId())
+							  .content(message.getContent())
+							  .type(message.getType())
+							  .build();
 	}
 
-	public Message toMessage(MongoMessage mongoMessage) {
-
+	public Message toDomain(MessageDocument messageDocument) {
 		return Message.builder()
-					  .messageId(mongoMessage.getMessageId())
-					  .senderId(mongoMessage.getSenderId())
-					  .content(mongoMessage.getContent())
-					  .type(mongoMessage.getType())
-					  .createdDate(mongoMessage.getCreatedDate())
+					  .messageId(messageDocument.getMessageId().toString())
+					  .roomId(messageDocument.getRoomId())
+					  .senderId(messageDocument.getSenderId())
+					  .content(messageDocument.getContent())
+					  .type(messageDocument.getType())
+					  .createdDate(messageDocument.getCreateDate())
 					  .build();
 	}
 }
