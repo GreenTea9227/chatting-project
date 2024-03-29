@@ -25,6 +25,7 @@ public class MessageConfig implements WebSocketMessageBrokerConfigurer {
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
 		registry.enableSimpleBroker("/single", "/multiple");
 		registry.setApplicationDestinationPrefixes("/send");
+		registry.setUserDestinationPrefix("/user");
 
 	}
 

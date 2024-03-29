@@ -9,7 +9,6 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -33,23 +32,22 @@ public class MessageInterceptor implements ChannelInterceptor {
 
 		switch (command) {
 			case CONNECT -> {
-				// 입장 메시지 전송
 				String token = extractToken(accessor);
-				String userId = tokenProvider.parseMemberIdFromToken(token);
-				UsernamePasswordAuthenticationToken authentication =
-					new UsernamePasswordAuthenticationToken(userId, null,
-						List.of(new SimpleGrantedAuthority("ROLE_USER")));
-
-				accessor.setUser(authentication);
+				String userId = setupUserAuthentication(token, accessor);
+				log.info("유저 ID '{}' CONNECT", userId);
 			}
 			case SUBSCRIBE -> {
 				String roomId = getRoomId(accessor.getDestination());
 				String userId = accessor.getUser().getName();
+				UserPrincipalToken user = (UserPrincipalToken)accessor.getUser();
+				user.setRoomId(roomId);
+
 				log.info("유저 ID '{}'가 방 '{}'에 입장", userId, roomId);
 			}
 			case DISCONNECT -> {
 				String userId = accessor.getUser().getName();
-				log.info("유저 ID '{}' 퇴장", userId);
+				UserPrincipalToken user = (UserPrincipalToken)accessor.getUser();
+				log.info("유저 ID '{}'가 방 '{}'에 퇴장", userId, user.getRoomId());
 			}
 		}
 		return message;
@@ -65,6 +63,14 @@ public class MessageInterceptor implements ChannelInterceptor {
 			throw new TokenException("토큰 예외");
 		}
 		return token;
+	}
+
+	private String setupUserAuthentication(String token, StompHeaderAccessor accessor) {
+		String userId = tokenProvider.parseMemberIdFromToken(token);
+		UserPrincipalToken userPrincipalToken = new UserPrincipalToken(userId, null,
+			List.of(new SimpleGrantedAuthority("ROLE_USER")));
+		accessor.setUser(userPrincipalToken);
+		return userId;
 	}
 
 	private String getRoomId(String destination) {

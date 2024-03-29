@@ -7,18 +7,18 @@ import com.kor.syh.chat.domain.Room;
 @Component
 public class RoomMapper {
 
-	public Room mapToDomain(MongoRoom mongoRoom) {
+	public Room toDomain(RoomDocument roomDocument) {
 
 		return Room.builder()
-				   .roomId(mongoRoom.getRoomId())
-				   .cratedDate(mongoRoom.getCreateDate())
-				   .updatedDate(mongoRoom.getUpdateDate())
+				   .roomId(roomDocument.getRoomId())
+				   .cratedDate(roomDocument.getCreateDate())
+				   .updatedDate(roomDocument.getUpdateDate())
 				   .build();
 	}
 
-	public MongoRoom mapToEntity(Room room) {
-		return MongoRoom.builder()
-						.roomId(room.getRoomId())
-						.build();
+	public RoomDocument toEntity(Room room) {
+		return RoomDocument.builder()
+						   .roomId(room.getRoomId())
+						   .build();
 	}
 }

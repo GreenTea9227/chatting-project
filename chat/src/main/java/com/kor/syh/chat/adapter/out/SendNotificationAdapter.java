@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.kor.syh.chat.application.port.out.SendNotificationPort;
 import com.kor.syh.common.NotifyType;
-import com.kor.syh.common.PublishNotificationDto;
+import com.kor.syh.common.RedisPubSubNotification;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,12 +19,12 @@ public class SendNotificationAdapter implements SendNotificationPort {
 
 	@Override
 	public void sendNotification(String fromId, String content) {
-		PublishNotificationDto build = PublishNotificationDto.builder()
-															 .id(UUID.randomUUID().toString())
-															 .content(content)
-															 .senderId(fromId)
-															 .type(NotifyType.MULTIPLE)
-															 .build();
+		RedisPubSubNotification build = RedisPubSubNotification.builder()
+															   .id(UUID.randomUUID().toString())
+															   .content(content)
+															   .senderId(fromId)
+															   .type(NotifyType.MULTIPLE)
+															   .build();
 
 	}
 }
