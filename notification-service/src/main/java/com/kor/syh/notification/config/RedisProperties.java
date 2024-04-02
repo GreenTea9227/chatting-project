@@ -1,4 +1,4 @@
-package com.kor.syh.notification;
+package com.kor.syh.notification.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

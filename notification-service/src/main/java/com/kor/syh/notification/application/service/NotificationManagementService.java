@@ -7,7 +7,10 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.kor.syh.notification.application.exception.NotificationDeletionException;
+import com.kor.syh.notification.application.exception.UnauthorizedAccessException;
 import com.kor.syh.notification.application.port.in.notification.NotificationUseCase;
+import com.kor.syh.notification.application.port.out.CheckLoginMemberPort;
 import com.kor.syh.notification.application.port.out.channel.MessageManagementPort;
 import com.kor.syh.notification.application.port.out.notification.NotificationPersistencePort;
 import com.kor.syh.notification.domain.Notify;
@@ -24,9 +27,14 @@ public class NotificationManagementService implements NotificationUseCase {
 
 	private final NotificationPersistencePort notificationPersistencePort;
 	private final MessageManagementPort messageManagementPort;
+	private final CheckLoginMemberPort checkLoginMemberPort;
 
 	@Override
 	public SseEmitter createNotificationChannel(String memberId) {
+
+		if (!checkLoginMemberPort.isLoginMember(memberId)) {
+			throw new UnauthorizedAccessException("먼저 로그인을 해야 합니다.");
+		};
 
 		SseEmitter sseEmitter = new SseEmitter(60 * 1000L);
 
@@ -42,10 +50,15 @@ public class NotificationManagementService implements NotificationUseCase {
 	}
 
 	@Override
-	public void deleteNotificationChannel(String memberId) {
-		notificationPersistencePort.deleteById(memberId);
-		messageManagementPort.removeSubscribe(memberId);
+	public void deleteNotificationChannel(String memberId)  {
+		try {
+			notificationPersistencePort.deleteById(memberId);
+			messageManagementPort.removeSubscribe(memberId);
+		} catch (Exception e) {
+			throw new NotificationDeletionException("Failed to delete notification channel", e);
+		}
 	}
+
 
 	private void sendDummyMessage(SseEmitter sseEmitter, String memberId) {
 		try {
