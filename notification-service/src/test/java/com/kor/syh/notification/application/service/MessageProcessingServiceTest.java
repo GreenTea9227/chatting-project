@@ -9,8 +9,10 @@ import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -22,7 +24,7 @@ import com.kor.syh.notification.application.port.out.channel.MessagePublishPort;
 import com.kor.syh.notification.application.port.out.channel.SendMessage;
 import com.kor.syh.notification.application.port.out.notification.NotificationPersistencePort;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class MessageProcessingServiceTest {
 
 	@InjectMocks
@@ -61,7 +63,7 @@ class MessageProcessingServiceTest {
 		SseEmitter mock = mock(SseEmitter.class);
 
 		when(notificationPersistencePort.findById(receiverId)).thenReturn(Optional.of(mock));
-		doNothing().when(notificationPersistencePort).deleteById(receiverId);
+		lenient().doNothing().when(notificationPersistencePort).deleteById(receiverId);
 		doNothing().when(mock).send((SseEmitter.SseEventBuilder)any());
 
 		// when
