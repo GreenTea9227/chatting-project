@@ -40,22 +40,22 @@ subprojects {
 bootJar { enabled = false }
 jar { enabled = true }
 
-project(':core-api') {
+project(':common') {
     bootJar { enabled = false }
     jar { enabled = true }
 }
 
-project(':chat') {
+project(':chat-service') {
     bootJar { enabled = true }
     jar { enabled = false }
 }
 
-project(':members') {
+project(':member-service') {
     bootJar { enabled = true }
     jar { enabled = false }
 }
 
-project(':notification') {
+project(':notification-service') {
     bootJar { enabled = true }
     jar { enabled = false }
 }
