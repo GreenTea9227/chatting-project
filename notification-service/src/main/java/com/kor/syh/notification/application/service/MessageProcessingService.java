@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.kor.syh.common.RedisPubSubNotification;
+import com.kor.syh.notification.application.exception.FailSendSseEmitterException;
+import com.kor.syh.notification.application.exception.NotFoundSseEmitterException;
 import com.kor.syh.notification.application.port.in.notification.ReceiveNotificationUseCase;
 import com.kor.syh.notification.application.port.in.notification.SendMessageCommand;
 import com.kor.syh.notification.application.port.out.channel.MessagePublishPort;
@@ -45,16 +47,18 @@ public class MessageProcessingService implements SendNotificationUseCase, Receiv
 	@Override
 	public void receive(String receiver, RedisPubSubNotification command) {
 
-		SseEmitter sseEmitter = notificationPersistencePort.findById(receiver).orElseThrow();
+		SseEmitter sseEmitter = notificationPersistencePort.findById(receiver)
+														   .orElseThrow(() -> new NotFoundSseEmitterException(
+															   "SseEmitter가 존재하지 않습니다."));
 
 		try {
 			sseEmitter.send(SseEmitter.event()
 									  .id(command.getId())
 									  .name(command.getType().name())
-									  .data(command));
+									  .data(command.getContent()));
 		} catch (IOException e) {
 			notificationPersistencePort.deleteById(receiver);
-			throw new RuntimeException(e);
+			throw new FailSendSseEmitterException(e.getMessage());
 		}
 
 	}

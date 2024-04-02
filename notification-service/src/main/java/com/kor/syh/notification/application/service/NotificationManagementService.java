@@ -26,7 +26,7 @@ public class NotificationManagementService implements NotificationUseCase {
 	private final MessageManagementPort messageManagementPort;
 
 	@Override
-	public SseEmitter createNotification(String memberId) {
+	public SseEmitter createNotificationChannel(String memberId) {
 
 		SseEmitter sseEmitter = new SseEmitter(60 * 1000L);
 
@@ -35,14 +35,14 @@ public class NotificationManagementService implements NotificationUseCase {
 
 		sseEmitter.onTimeout(sseEmitter::complete);
 		sseEmitter.onError((e) -> sseEmitter.complete());
-		sseEmitter.onCompletion(() -> deleteNotification(memberId));
+		sseEmitter.onCompletion(() -> deleteNotificationChannel(memberId));
 
 		sendDummyMessage(sseEmitter, memberId);
 		return sseEmitter;
 	}
 
 	@Override
-	public void deleteNotification(String memberId) {
+	public void deleteNotificationChannel(String memberId) {
 		notificationPersistencePort.deleteById(memberId);
 		messageManagementPort.removeSubscribe(memberId);
 	}
@@ -61,7 +61,7 @@ public class NotificationManagementService implements NotificationUseCase {
 									  .id(memberId)
 									  .data(notify));
 		} catch (IOException e) {
-			deleteNotification(memberId);
+			deleteNotificationChannel(memberId);
 			throw new RuntimeException(e);
 		}
 	}
