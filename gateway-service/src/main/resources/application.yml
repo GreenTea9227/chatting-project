@@ -46,10 +46,9 @@ spring:
         - id: chat-service
           uri: lb://CHAT-SERVICE
           predicates:
-            - Path=/chat/**, /room-service/**
+            - Path=/chat/**, /room/**
             - Method=POST,GET
           filters:
-            - RewritePath=/chat-service/(?<segment>.*),/$\{segment}
             - AuthorizationFilter
 
         - id: notification-service

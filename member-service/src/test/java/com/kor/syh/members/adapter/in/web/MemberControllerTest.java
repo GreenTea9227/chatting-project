@@ -27,6 +27,9 @@ import com.kor.syh.member.adapter.in.web.MemberController;
 import com.kor.syh.member.adapter.in.web.RegisterMemberRequest;
 import com.kor.syh.member.adapter.out.exception.MemberNotFoundException;
 import com.kor.syh.member.application.port.in.auth.LoginMemberUseCase;
+import com.kor.syh.member.application.port.in.auth.LogoutMemberUseCase;
+import com.kor.syh.member.application.port.in.member.FindMemberUseCase;
+import com.kor.syh.member.application.port.in.member.RegisterMemberUseCase;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -42,6 +45,15 @@ class MemberControllerTest {
 
 	@MockBean
 	private LoginMemberUseCase loginMemberUseCase;
+
+	@MockBean
+	private RegisterMemberUseCase registerMemberUseCase;
+
+	@MockBean
+	private FindMemberUseCase findMemberUseCase;
+
+	@MockBean
+	private LogoutMemberUseCase logoutMemberUseCase;
 
 	@AfterEach
 	void cleaningData() {
@@ -73,7 +85,7 @@ class MemberControllerTest {
 			String requestStr = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions perform = mvc.perform(post("/member/register")
+			ResultActions perform = mvc.perform(post("/register")
 				.contentType("application/json")
 				.content(requestStr));
 
@@ -97,7 +109,7 @@ class MemberControllerTest {
 			String requestStr = objectMapper.writeValueAsString(request);
 
 			// when
-			assertThatThrownBy(() -> mvc.perform(post("/member/register")
+			assertThatThrownBy(() -> mvc.perform(post("/register")
 				.contentType("application/json")
 				.content(requestStr)))
 				.hasCauseInstanceOf(ConstraintViolationException.class);
@@ -118,10 +130,10 @@ class MemberControllerTest {
 			String requestStr = objectMapper.writeValueAsString(request);
 
 			String jwtToken = "jwt-token-value";
-			when(loginMemberUseCase.login(eq(loginId), eq(password),any())).thenReturn(jwtToken);
+			when(loginMemberUseCase.login(eq(loginId), eq(password), any())).thenReturn(jwtToken);
 
 			// when
-			ResultActions perform = mvc.perform(post("/member/login")
+			ResultActions perform = mvc.perform(post("/login")
 				.contentType("application/json")
 				.content(requestStr));
 
@@ -143,12 +155,12 @@ class MemberControllerTest {
 			String ip = "0.0.0.0";
 			LoginMemberRequest request = new LoginMemberRequest(loginId, password);
 			String requestStr = objectMapper.writeValueAsString(request);
-			when(loginMemberUseCase.login(eq(request.getLoginId()), eq(request.getPassword()),any())).thenThrow(
+			when(loginMemberUseCase.login(eq(request.getLoginId()), eq(request.getPassword()), any())).thenThrow(
 				MemberNotFoundException.class);
 
 			// when, then
 
-			ResultActions perform = mvc.perform(post("/member/login")
+			ResultActions perform = mvc.perform(post("/login")
 				.contentType("application/json")
 				.content(requestStr));
 

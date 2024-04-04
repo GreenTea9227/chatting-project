@@ -23,7 +23,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/member-service")
 @RestController
 public class MemberController {
 
@@ -31,7 +30,6 @@ public class MemberController {
 	private final FindMemberUseCase findMemberUseCase;
 	private final LoginMemberUseCase loginMemberUseCase;
 	private final LogoutMemberUseCase logoutMemberUseCase;
-	private final TokenProvider tokenProvider;
 
 	@PostMapping("/register")
 	public CommonResponse<?> register(@RequestBody RegisterMemberRequest request) {

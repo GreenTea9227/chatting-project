@@ -3,6 +3,7 @@ package com.kor.syh.chat.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,12 +34,12 @@ class MessageRepositoryTest {
 	@Test
 	void save_message() {
 		// given
-		ObjectId roomId = new ObjectId();
+		String roomId = UUID.randomUUID().toString();
 		Message message = Message.builder()
 								 .type(MessageType.SEND)
 								 .content("hello")
 								 .senderId("senderId")
-								 .roomId(roomId.toString())
+								 .roomId(roomId)
 								 .build();
 
 		// when

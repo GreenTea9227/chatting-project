@@ -9,6 +9,8 @@ server:
 spring:
   application:
     name: notification-service
+  config:
+    import: "optional:configserver:"
   profiles:
     include: common
   rabbitmq:

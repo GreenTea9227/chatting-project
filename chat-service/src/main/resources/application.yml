@@ -3,9 +3,9 @@ server:
 
 custom:
   kafka:
-    topic_id: chat
-    group_id: group_chat
-    server: localhost:9092
+    TOPIC_ID: chat
+    GROUP_ID: group_chat
+    SERVER: localhost:9092
 
 spring:
   application:
@@ -17,7 +17,7 @@ spring:
     username: guest
     password: guest
   config:
-    import: configserver:http://config-service:8888
+    import: optional:configserver:http://config-service:8888
   data:
     mongodb:
       uri: mongodb://john:1111@localhost:27018/room?authSource=admin
