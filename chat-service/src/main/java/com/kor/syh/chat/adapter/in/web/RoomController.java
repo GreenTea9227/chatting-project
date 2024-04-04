@@ -11,7 +11,7 @@ import com.kor.syh.common.CommonResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/room")
+@RequestMapping("/room-service")
 @RestController
 public class RoomController {
 

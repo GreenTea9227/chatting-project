@@ -8,6 +8,8 @@ custom:
     server: localhost:9092
 
 spring:
+  application:
+    name: chat-service
   profiles:
     include: common
   data:
@@ -20,3 +22,16 @@ redis:
   password: 1111
   database: 0
 
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info

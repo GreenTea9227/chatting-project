@@ -14,6 +14,8 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
+
 }
 
 subprojects {
@@ -21,7 +23,6 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-
 
     dependencies {
         compileOnly 'org.projectlombok:lombok'
@@ -31,6 +32,15 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
+    ext {
+        set('springCloudVersion', "2022.0.5")
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
 
     tasks.named('test') {
         useJUnitPlatform()

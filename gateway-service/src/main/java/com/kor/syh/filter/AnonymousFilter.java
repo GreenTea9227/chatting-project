@@ -23,8 +23,8 @@ public class AnonymousFilter extends AbstractGatewayFilterFactory<AnonymousFilte
 	public static class Config {
 	}
 
-	public AnonymousFilter(Class<Config> configClass, TokenProvider tokenProvider) {
-		super(configClass);
+	public AnonymousFilter(TokenProvider tokenProvider) {
+		super(AnonymousFilter.Config.class);
 		this.tokenProvider = tokenProvider;
 	}
 

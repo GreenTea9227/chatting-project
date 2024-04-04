@@ -7,5 +7,20 @@ server:
   port: 8083
 
 spring:
+  application:
+    name: notification-service
   profiles:
     include: common
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info
