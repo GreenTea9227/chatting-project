@@ -20,14 +20,14 @@ spring:
             - Path=/member-service/login, /member-service/register
             - Method=POST
           filters:
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+            - RewritePath=/member-service/(?<segment>.*),/$\{segment}
         - id: logout
           uri: lb://MEMBER-SERVICE
           predicates:
             - Path=/member-service/logout
             - Method=POST
           filters:
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+            - RewritePath=/member-service/(?<segment>.*),/$\{segment}
             - AuthorizationFilter
         - id: member-service
           uri: lb://MEMBER-SERVICE
@@ -35,11 +35,11 @@ spring:
             - Path=/member-service/**
             - Method=POST
           filters:
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+            - RewritePath=/member-service/(?<segment>.*),/$\{segment}
             - AuthorizationFilter
 
         - id: websocket-service
-          uri: ws://localhost:8082
+          uri: ws://CHAT-SERVICE
           predicates:
             - Path=/ws/**
 
