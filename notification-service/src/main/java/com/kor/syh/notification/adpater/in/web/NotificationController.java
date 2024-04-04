@@ -14,7 +14,6 @@ import com.kor.syh.notification.application.port.in.notification.NotificationUse
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/notification")
 @RestController
 public class NotificationController {
 

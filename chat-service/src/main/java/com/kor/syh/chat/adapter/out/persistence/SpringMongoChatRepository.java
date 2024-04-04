@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface SpringMongoChatRepository extends MongoRepository<MessageDocument, String> {
 
-	Optional<MessageDocument> findByRoomId(ObjectId roomId);
+	Optional<MessageDocument> findByRoomId(String roomId);
 }

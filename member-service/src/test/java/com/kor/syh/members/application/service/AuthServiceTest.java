@@ -16,6 +16,7 @@ import com.kor.syh.common.jwt.TokenProvider;
 import com.kor.syh.member.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.member.application.port.out.member.FindMemberPort;
 import com.kor.syh.member.application.port.out.member.LoginStatusPort;
+import com.kor.syh.member.application.port.out.member.TokenStoragePort;
 import com.kor.syh.member.application.service.AuthService;
 import com.kor.syh.member.domain.Member;
 
@@ -32,6 +33,8 @@ class AuthServiceTest {
 	private LoginStatusPort loginStatusPort;
 	@Mock
 	private PasswordEncoder passwordEncoder;
+	@Mock
+	private TokenStoragePort tokenStoragePort;
 
 	@DisplayName("로그인 인증 성공")
 	@Test
@@ -40,7 +43,7 @@ class AuthServiceTest {
 		String loginId = "loginId";
 		String password = "1111";
 		String username = "user1";
-		String ip ="0.0.0.0";
+		String ip = "0.0.0.0";
 		Member member = Member.builder()
 							  .loginId(loginId)
 							  .password(password)
@@ -48,12 +51,13 @@ class AuthServiceTest {
 							  .build();
 		when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
 		when(passwordEncoder.matches(password, member.getPassword())).thenReturn(true);
-		doNothing().when(loginStatusPort).login(any(),any());
+		doNothing().when(loginStatusPort).login(any(), any());
 		String jwtToken = "jwt-token-value";
+		doNothing().when(tokenStoragePort).saveToken(member.getId(),jwtToken);
 		when(tokenProvider.generateJwtToken(any(JwtCreateRequestDto.class))).thenReturn(jwtToken);
 		// when
 
-		String responseJwt = authService.login(loginId, password,ip);
+		String responseJwt = authService.login(loginId, password, ip);
 
 		// then
 		assertThat(responseJwt).isEqualTo(jwtToken);
@@ -66,7 +70,7 @@ class AuthServiceTest {
 		String loginId = "loginId";
 		String password = "1111";
 		String username = "user1";
-		String ip ="0.0.0.0";
+		String ip = "0.0.0.0";
 		Member member = Member.builder()
 							  .loginId(loginId)
 							  .password(password)
@@ -75,10 +79,9 @@ class AuthServiceTest {
 		when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
 		when(passwordEncoder.matches(password, member.getPassword())).thenReturn(false);
 
-
 		// when
 
-		assertThatThrownBy(() -> authService.login(loginId, password,ip))
+		assertThatThrownBy(() -> authService.login(loginId, password, ip))
 			.isInstanceOf(PasswordMisMatchException.class);
 
 	}

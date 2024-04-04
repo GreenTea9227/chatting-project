@@ -7,5 +7,25 @@ server:
   port: 8083
 
 spring:
+  application:
+    name: notification-service
+  config:
+    import: "optional:configserver:"
   profiles:
     include: common
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, busrefresh

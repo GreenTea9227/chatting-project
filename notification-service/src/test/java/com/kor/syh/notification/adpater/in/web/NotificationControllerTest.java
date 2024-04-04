@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,7 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.kor.syh.notification.application.port.in.notification.NotificationUseCase;
 
-@AutoConfigureWebTestClient
 @WebMvcTest(NotificationController.class)
 class NotificationControllerTest {
 
@@ -34,7 +34,7 @@ class NotificationControllerTest {
 
 		//TODO sse test code 추가 작성
 		//when
-		ResultActions perform = mvc.perform(get("/notification/subscribe")
+		ResultActions perform = mvc.perform(get("/subscribe")
 			.header("X-Authorization-Id", memberId));
 
 		//then

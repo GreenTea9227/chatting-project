@@ -3,13 +3,21 @@ server:
 
 custom:
   kafka:
-    topic_id: chat
-    group_id: group_chat
-    server: localhost:9092
+    TOPIC_ID: chat
+    GROUP_ID: group_chat
+    SERVER: localhost:9092
 
 spring:
+  application:
+    name: chat-service
   profiles:
     include: common
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
+  config:
+    import: optional:configserver:http://config-service:8888
   data:
     mongodb:
       uri: mongodb://john:1111@localhost:27018/room?authSource=admin
@@ -20,3 +28,16 @@ redis:
   password: 1111
   database: 0
 
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, busrefresh
