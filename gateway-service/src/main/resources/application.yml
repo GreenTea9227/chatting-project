@@ -5,7 +5,10 @@ spring:
     name: gateway-service
   profiles:
     include: common
-
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
   cloud:
     gateway:
       default-filters:
@@ -74,4 +77,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: info
+        include: info, busrefresh

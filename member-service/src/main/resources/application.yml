@@ -6,6 +6,10 @@ spring:
     name: member-service
   profiles:
     include: auth,common
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
   datasource:
     url: jdbc:mysql://localhost:3306/msa?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
     username: root
@@ -32,7 +36,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: info
+        include: info, busrefresh
 
 login:
   timeout: 3600000

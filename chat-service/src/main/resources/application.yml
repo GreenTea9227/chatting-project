@@ -12,6 +12,12 @@ spring:
     name: chat-service
   profiles:
     include: common
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
+  config:
+    import: configserver:http://config-service:8888
   data:
     mongodb:
       uri: mongodb://john:1111@localhost:27018/room?authSource=admin
@@ -34,4 +40,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: info
+        include: info, busrefresh
