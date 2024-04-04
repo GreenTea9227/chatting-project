@@ -2,7 +2,6 @@ package com.kor.syh.filter;
 
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -23,13 +22,13 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
-public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
+public class AuthorizationFilter extends AbstractGatewayFilterFactory<AuthorizationFilter.Config> {
 
-	@Autowired
-	private TokenProvider tokenProvider;
+	private final TokenProvider tokenProvider;
 
-	public AuthorizationHeaderFilter() {
+	public AuthorizationFilter(TokenProvider tokenProvider) {
 		super(Config.class);
+		this.tokenProvider = tokenProvider;
 	}
 
 	@Override

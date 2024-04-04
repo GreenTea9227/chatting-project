@@ -4,7 +4,15 @@ ext {
 
 dependencies {
     implementation project(":common")
+
+    // Gateway
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+
+    // Eureka
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     //JWT
