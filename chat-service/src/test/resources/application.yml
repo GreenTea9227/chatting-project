@@ -1,0 +1,19 @@
+
+spring:
+  profiles:
+    include: common
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
+  cloud:
+    discovery:
+      enabled: false
+    config:
+      enabled: false
+
+custom:
+  kafka:
+    TOPIC_ID: chat
+    GROUP_ID: group_chat
+    SERVER: localhost:9092

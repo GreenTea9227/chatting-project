@@ -4,6 +4,8 @@ spring:
   profiles:
     include: auth,common
   cloud:
+    config:
+      enabled: false
     discovery:
       enabled: false
 
