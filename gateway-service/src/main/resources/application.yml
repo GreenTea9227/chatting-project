@@ -5,6 +5,8 @@ spring:
     name: gateway-service
   profiles:
     include: common
+  config:
+    import: optional:configserver:http://config-service:8888
   rabbitmq:
     host: 127.0.0.1
     username: guest
@@ -28,15 +30,12 @@ spring:
             - Method=POST
           filters:
             - RewritePath=/member-service/(?<segment>.*),/$\{segment}
-            - AuthorizationFilter
         - id: member-service
           uri: lb://MEMBER-SERVICE
           predicates:
             - Path=/member-service/**
-            - Method=POST
           filters:
             - RewritePath=/member-service/(?<segment>.*),/$\{segment}
-            - AuthorizationFilter
 
         - id: websocket-service
           uri: ws://CHAT-SERVICE
