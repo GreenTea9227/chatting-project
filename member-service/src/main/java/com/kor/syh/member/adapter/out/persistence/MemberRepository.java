@@ -38,4 +38,11 @@ public class MemberRepository implements RegisterMemberPort, FindMemberPort {
 
 		return mapper.toDomain(jpaEntity);
 	}
+
+	@Override
+	public Member findByMemberId(String memberId) {
+		MemberJpaEntity jpaEntity = memberRepository.findById(memberId)
+															   .orElseThrow(MemberNotFoundException::new);
+		return mapper.toDomain(jpaEntity);
+	}
 }

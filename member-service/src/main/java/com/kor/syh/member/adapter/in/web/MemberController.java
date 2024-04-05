@@ -30,7 +30,7 @@ public class MemberController {
 	private final LogoutMemberUseCase logoutMemberUseCase;
 
 	@PostMapping("/register")
-	public CommonResponse<?> register(@RequestBody RegisterMemberRequest request) {
+	public CommonResponse<?> register(@Valid @RequestBody RegisterMemberRequest request) {
 		RegisterMemberCommand command = new RegisterMemberCommand(
 			request.getLoginId(),
 			request.getPassword(),
@@ -66,4 +66,5 @@ public class MemberController {
 
 		return CommonResponse.of("success", findMemberResponse, null);
 	}
+
 }

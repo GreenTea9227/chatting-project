@@ -98,7 +98,7 @@ project(':member-service') {
         testImplementation 'com.h2database:h2:2.2.224'
 
         // Security
-        implementation 'org.springframework.security:spring-security-crypto'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
 
         // Configuration & Discovery
         implementation 'org.springframework.cloud:spring-cloud-starter-config'
