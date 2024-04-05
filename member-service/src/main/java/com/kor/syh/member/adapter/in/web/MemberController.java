@@ -4,12 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kor.syh.common.CommonResponse;
 import com.kor.syh.common.jwt.JwtToken;
-import com.kor.syh.common.jwt.TokenProvider;
 import com.kor.syh.member.application.port.in.auth.LoginMemberUseCase;
 import com.kor.syh.member.application.port.in.auth.LogoutMemberUseCase;
 import com.kor.syh.member.application.port.in.member.FindMemberResponse;

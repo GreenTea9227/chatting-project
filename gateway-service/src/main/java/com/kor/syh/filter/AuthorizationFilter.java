@@ -14,7 +14,7 @@ import org.springframework.web.server.ServerWebExchange;
 
 import com.kor.syh.common.CommonResponse;
 import com.kor.syh.common.jwt.TokenException;
-import com.kor.syh.common.jwt.TokenProvider;
+import com.kor.syh.common.jwt.JwtUtils;
 import com.kor.syh.common.utils.JsonUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +24,11 @@ import reactor.core.publisher.Mono;
 @Component
 public class AuthorizationFilter extends AbstractGatewayFilterFactory<AuthorizationFilter.Config> {
 
-	private final TokenProvider tokenProvider;
+	private final JwtUtils jwtUtils;
 
-	public AuthorizationFilter(TokenProvider tokenProvider) {
+	public AuthorizationFilter(JwtUtils jwtUtils) {
 		super(Config.class);
-		this.tokenProvider = tokenProvider;
+		this.jwtUtils = jwtUtils;
 	}
 
 	@Override
@@ -38,8 +38,8 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
 			if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
 				String token = authorizationHeader.substring(7);
 				try {
-					if (tokenProvider.isValidToken(token)) {
-						String userId = tokenProvider.parseMemberIdFromToken(token);
+					if (jwtUtils.isValidToken(token)) {
+						String userId = jwtUtils.parseMemberIdFromToken(token);
 						exchange.getRequest().mutate()
 								.header("X-Authorization-Id", userId)
 								.build();

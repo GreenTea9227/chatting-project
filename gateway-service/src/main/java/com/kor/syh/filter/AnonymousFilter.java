@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 
-import com.kor.syh.common.jwt.TokenProvider;
+import com.kor.syh.common.jwt.JwtUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -18,14 +18,14 @@ import reactor.core.publisher.Mono;
 @Component
 public class AnonymousFilter extends AbstractGatewayFilterFactory<AnonymousFilter.Config> {
 
-	private final TokenProvider tokenProvider;
+	private final JwtUtils jwtUtils;
 
 	public static class Config {
 	}
 
-	public AnonymousFilter(TokenProvider tokenProvider) {
+	public AnonymousFilter(JwtUtils jwtUtils) {
 		super(AnonymousFilter.Config.class);
-		this.tokenProvider = tokenProvider;
+		this.jwtUtils = jwtUtils;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class AnonymousFilter extends AbstractGatewayFilterFactory<AnonymousFilte
 
 	private boolean isAnonymousUser(String authorizationHeader) {
 		return StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")
-			&& tokenProvider.isValidToken(authorizationHeader.substring(7));
+			&& jwtUtils.isValidToken(authorizationHeader.substring(7));
 	}
 
 	private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {

@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.kor.syh.common.jwt.JwtCreateRequestDto;
-import com.kor.syh.common.jwt.TokenProvider;
+import com.kor.syh.common.jwt.JwtUtils;
 import com.kor.syh.member.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.member.application.port.out.member.FindMemberPort;
 import com.kor.syh.member.application.port.out.member.LoginStatusPort;
@@ -28,7 +28,7 @@ class AuthServiceTest {
 	@Mock
 	private FindMemberPort findMemberPort;
 	@Mock
-	private TokenProvider tokenProvider;
+	private JwtUtils jwtUtils;
 	@Mock
 	private LoginStatusPort loginStatusPort;
 	@Mock
@@ -54,7 +54,7 @@ class AuthServiceTest {
 		doNothing().when(loginStatusPort).login(any(), any());
 		String jwtToken = "jwt-token-value";
 		doNothing().when(tokenStoragePort).saveToken(member.getId(),jwtToken);
-		when(tokenProvider.generateJwtToken(any(JwtCreateRequestDto.class))).thenReturn(jwtToken);
+		when(jwtUtils.generateJwtToken(any(JwtCreateRequestDto.class))).thenReturn(jwtToken);
 		// when
 
 		String responseJwt = authService.login(loginId, password, ip);
