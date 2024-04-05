@@ -38,7 +38,7 @@ spring:
             - RewritePath=/member-service/(?<segment>.*),/$\{segment}
 
         - id: websocket-service
-          uri: ws://CHAT-SERVICE
+          uri: lb:ws://CHAT-SERVICE
           predicates:
             - Path=/ws/**
 
