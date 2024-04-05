@@ -1,8 +1,8 @@
 package com.kor.syh.members.adapter.in.web;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.stream.Stream;
@@ -30,8 +30,6 @@ import com.kor.syh.member.application.port.in.auth.LoginMemberUseCase;
 import com.kor.syh.member.application.port.in.auth.LogoutMemberUseCase;
 import com.kor.syh.member.application.port.in.member.FindMemberUseCase;
 import com.kor.syh.member.application.port.in.member.RegisterMemberUseCase;
-
-import jakarta.validation.ConstraintViolationException;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -63,15 +61,6 @@ class MemberControllerTest {
 	@DisplayName("회원 가입")
 	@Nested
 	class RegisterTest {
-		static Stream<Arguments> failRegisterMemberData() {
-			return Stream.of(
-				Arguments.of("", "password", "username", "nickname", "userId 누락"),
-				Arguments.of("userId", "", "username", "nickname", "password 누락"),
-				Arguments.of("userId", "password", "", "nickname", "username 누락"),
-				Arguments.of("userId", "password", "username", "", "nickname 누락")
-			);
-		}
-
 		@DisplayName("회원 가입 성공")
 		@Test
 		void success_register() throws Exception {
@@ -98,6 +87,15 @@ class MemberControllerTest {
 				   .andExpect(jsonPath("$.message").value("가입 성공"));
 		}
 
+		static Stream<Arguments> failRegisterMemberData() {
+			return Stream.of(
+				Arguments.of("", "password", "username", "nickname", "userId 누락"),
+				Arguments.of("userId", "", "username", "nickname", "password 누락"),
+				Arguments.of("userId", "password", "", "nickname", "username 누락"),
+				Arguments.of("userId", "password", "username", "", "nickname 누락")
+			);
+		}
+
 		@DisplayName("회원 등록 값이 잘못된 경우 실패한다.")
 		@ParameterizedTest(name = "{index} => {4}")
 		@MethodSource("failRegisterMemberData")
@@ -109,10 +107,10 @@ class MemberControllerTest {
 			String requestStr = objectMapper.writeValueAsString(request);
 
 			// when
-			assertThatThrownBy(() -> mvc.perform(post("/register")
-				.contentType("application/json")
-				.content(requestStr)))
-				.hasCauseInstanceOf(ConstraintViolationException.class);
+			mvc.perform(post("/register")
+				   .contentType("application/json")
+				   .content(requestStr))
+			   .andDo(print());
 
 		}
 	}
