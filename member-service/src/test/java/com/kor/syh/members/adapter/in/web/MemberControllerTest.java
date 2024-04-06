@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -122,7 +124,7 @@ class MemberControllerTest {
 		@Test
 		void success_login() throws Exception {
 			// given
-			String password = "1111";
+			String password = "1111111";
 			String loginId = "loginId";
 			LoginMemberRequest request = new LoginMemberRequest(loginId, password);
 			String requestStr = objectMapper.writeValueAsString(request);
@@ -148,7 +150,7 @@ class MemberControllerTest {
 		@Test
 		void fail_login() throws Exception {
 			// given
-			String password = "1111";
+			String password = "1111111";
 			String loginId = "loginId";
 			String ip = "0.0.0.0";
 			LoginMemberRequest request = new LoginMemberRequest(loginId, password);
@@ -171,6 +173,41 @@ class MemberControllerTest {
 				   .andExpect(jsonPath("$.message").value("존재하지 않는 회원입니다."));
 
 		}
+	}
+
+	@Nested
+	public class PageAccessTest {
+
+		@WithAnonymousUser
+		@DisplayName("로그인 하지 않은 경우 권한이 필요한 페이지 접근에 실패한다.")
+		@Test
+		void unauthorized_access_fails() throws Exception {
+			// when, then
+			mvc.perform(get("/randomPage"))
+			   .andExpect(status().isUnauthorized());
+		}
+
+		@WithMockUser
+		@DisplayName("404 page test")
+		@Test
+		void not_found_page_returns_404() throws Exception {
+			// when, then
+			mvc.perform(get("/nonExistentPage"))
+			   .andExpect(status().isNotFound());
+		}
+
+		@WithMockUser
+		@DisplayName("인증된 유저는 로그아웃을 할 수 있다")
+		@Test
+		void authenticated_user_can_logout_successfully() throws Exception {
+			// given
+			mvc.perform(get("/logout"))
+			   .andExpect(status().isOk())
+			   .andExpect(jsonPath("$.status").value("success"))
+			   .andExpect(jsonPath("$.data").isEmpty())
+			   .andExpect(jsonPath("$.message").value("로그아웃 성공"));
+		}
+
 	}
 
 }

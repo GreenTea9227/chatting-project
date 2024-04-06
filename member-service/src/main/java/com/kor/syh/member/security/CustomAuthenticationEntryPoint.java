@@ -28,17 +28,18 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
 		log.error("Not Authenticated Request", authException);
 		CommonResponse<?> commonResponse;
-		String responseBody;
+
 		switch (response.getStatus()) {
 			case 404 -> {
 				commonResponse = CommonResponse.fail("page not found");
 			}
 			default -> {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				commonResponse = CommonResponse.fail("인증 되지 않은 사용자입니다.");
 			}
 		}
 
-		responseBody = mapper.writeValueAsString(commonResponse);
+		String responseBody = mapper.writeValueAsString(commonResponse);
 
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setCharacterEncoding("UTF-8");

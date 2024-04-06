@@ -30,6 +30,7 @@ public class SecurityConfig {
 			.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.formLogin(f -> f.disable())
 			.httpBasic(h -> h.disable())
+			.logout(logout ->logout.disable())
 			.authorizeHttpRequests(r -> r.requestMatchers("/register", "/login").permitAll()
 										 .anyRequest().authenticated())
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

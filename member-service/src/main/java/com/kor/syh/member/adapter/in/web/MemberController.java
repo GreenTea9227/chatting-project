@@ -1,9 +1,10 @@
 package com.kor.syh.member.adapter.in.web;
 
+import java.security.Principal;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kor.syh.common.CommonResponse;
@@ -43,19 +44,22 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public CommonResponse<?> login(@RequestBody LoginMemberRequest request, HttpServletRequest httpServletRequest) {
+	public CommonResponse<?> login(@Valid @RequestBody LoginMemberRequest request,
+		HttpServletRequest httpServletRequest) {
 		String clientIp = HttpRequestUtils.getClientIp(httpServletRequest);
-		String token = loginMemberUseCase.login(request.getLoginId(), request.getPassword(),clientIp);
+		String token = loginMemberUseCase.login(request.getLoginId(), request.getPassword(), clientIp);
 		JwtToken jwtToken = new JwtToken(token);
 
 		return CommonResponse.success(jwtToken, "로그인 성공");
 	}
 
 	@GetMapping("/logout")
-	public CommonResponse<?> login(@RequestHeader("X-Authorization-Id") String userId, HttpServletRequest httpServletRequest) {
+	public CommonResponse<?> logout(Principal principal, HttpServletRequest httpServletRequest) {
+		String userId = principal.getName();
+
 		String clientIp = HttpRequestUtils.getClientIp(httpServletRequest);
 
-		logoutMemberUseCase.logout(userId,clientIp);
+		logoutMemberUseCase.logout(userId, clientIp);
 		return CommonResponse.success("로그아웃 성공");
 	}
 
