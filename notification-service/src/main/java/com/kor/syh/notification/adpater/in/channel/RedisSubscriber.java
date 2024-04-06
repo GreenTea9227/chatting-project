@@ -23,7 +23,7 @@ public class RedisSubscriber implements MessageListener {
 
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
-
+		log.info("redis message 도착 -> {}",message);
 		String fullTopicName = new String(message.getChannel(), StandardCharsets.UTF_8);
 		String receiver = TopicUtils.extractTopic(fullTopicName);
 		RedisPubSubNotification receiveMessage = JsonUtil.byteToClass(message.getBody(), RedisPubSubNotification.class);

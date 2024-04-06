@@ -99,6 +99,8 @@ project(':member-service') {
 
         // Security
         implementation 'org.springframework.boot:spring-boot-starter-security'
+        testImplementation 'org.springframework.security:spring-security-test:6.2.3'
+
 
         // Configuration & Discovery
         implementation 'org.springframework.cloud:spring-cloud-starter-config'

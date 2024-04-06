@@ -8,7 +8,9 @@ import com.kor.syh.notification.application.port.out.channel.SendMessage;
 import com.kor.syh.notification.util.TopicUtils;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RedisMessagePublishAdapter implements MessagePublishPort {
@@ -18,6 +20,7 @@ public class RedisMessagePublishAdapter implements MessagePublishPort {
 	@Override
 	public Long publish(String receiver, SendMessage message) {
 		String topic = TopicUtils.createTopic(receiver);
+		log.info("redis topic : [{}], message -> [{}]", topic, message.toString());
 		return redisTemplate.convertAndSend(topic, message);
 	}
 }
