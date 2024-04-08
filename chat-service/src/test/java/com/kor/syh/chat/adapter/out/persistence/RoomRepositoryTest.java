@@ -10,11 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
 
+import com.kor.syh.chat.MongoTestContainers;
 import com.kor.syh.chat.domain.Room;
 
 @Import({RoomMapper.class, RoomRepository.class})
 @DataMongoTest
-class RoomRepositoryTest {
+class RoomRepositoryTest extends MongoTestContainers {
 	@Autowired
 	private RoomRepository roomRepository;
 	@Autowired
