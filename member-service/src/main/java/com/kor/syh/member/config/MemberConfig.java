@@ -1,4 +1,4 @@
-package com.kor.syh.member;
+package com.kor.syh.member.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

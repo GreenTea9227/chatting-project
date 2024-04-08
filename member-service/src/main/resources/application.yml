@@ -6,6 +6,8 @@ spring:
     name: member-service
   profiles:
     include: auth,common
+  config:
+    import: optional:configserver:http://config-service:8888
   rabbitmq:
     host: 127.0.0.1
     username: guest
@@ -36,7 +38,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: info, busrefresh
+        include: info,metrics, busrefresh
 
 login:
   timeout: 3600000

@@ -1,5 +1,9 @@
 package com.kor.syh.common;
 
+import java.util.List;
+
+import org.springframework.validation.BindException;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -32,6 +36,15 @@ public class CommonResponse<T> {
 
 	public static <T> CommonResponse<T> error(T data, String message) {
 		return CommonResponse.of(ERROR_STATUS, data, message);
+	}
+
+	public static CommonResponse<?> failBinding(BindException bindException) {
+
+		List<CustomFieldError> errors = bindException.getFieldErrors().stream().map(error -> new CustomFieldError(
+			error.getField(),  error.getCode(),error.getDefaultMessage()
+		)).toList();
+
+		return new CommonResponse<>(FAIL_STATUS, errors, bindException.getObjectName());
 	}
 
 }

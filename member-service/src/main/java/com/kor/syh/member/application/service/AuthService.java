@@ -4,7 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kor.syh.common.jwt.JwtCreateRequestDto;
-import com.kor.syh.common.jwt.TokenProvider;
+import com.kor.syh.common.jwt.JwtUtils;
 import com.kor.syh.member.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.member.application.port.in.auth.LoginMemberUseCase;
 import com.kor.syh.member.application.port.out.member.FindMemberPort;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthService implements LoginMemberUseCase, LogoutMemberUseCase {
 
 	private final FindMemberPort findMemberPort;
-	private final TokenProvider tokenProvider;
+	private final JwtUtils jwtUtils;
 	private final PasswordEncoder passwordEncoder;
 	private final TokenStoragePort tokenStoragePort;
 	private final LoginStatusPort loginStatusPort;
@@ -41,7 +41,7 @@ public class AuthService implements LoginMemberUseCase, LogoutMemberUseCase {
 															.username(member.getUsername())
 															.id(member.getId())
 															.build();
-		String token = tokenProvider.generateJwtToken(requestDto);
+		String token = jwtUtils.generateJwtToken(requestDto);
 
 		//TODO 사용자 기기 정보 식별
 		tokenStoragePort.saveToken(member.getId(),token);

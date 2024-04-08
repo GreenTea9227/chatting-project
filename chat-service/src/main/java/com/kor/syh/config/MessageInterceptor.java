@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.kor.syh.common.jwt.TokenException;
-import com.kor.syh.common.jwt.TokenProvider;
+import com.kor.syh.common.jwt.JwtUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class MessageInterceptor implements ChannelInterceptor {
 
-	private final TokenProvider tokenProvider;
+	private final JwtUtils jwtUtils;
 
 	@Override
 	public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -59,14 +59,14 @@ public class MessageInterceptor implements ChannelInterceptor {
 			throw new MessageDeliveryException("메세지 예외");
 		}
 		String token = authorizationHeader.substring(7);
-		if (!tokenProvider.isValidToken(token)) {
+		if (!jwtUtils.isValidToken(token)) {
 			throw new TokenException("토큰 예외");
 		}
 		return token;
 	}
 
 	private String setupUserAuthentication(String token, StompHeaderAccessor accessor) {
-		String userId = tokenProvider.parseMemberIdFromToken(token);
+		String userId = jwtUtils.parseMemberIdFromToken(token);
 		UserPrincipalToken userPrincipalToken = new UserPrincipalToken(userId, null,
 			List.of(new SimpleGrantedAuthority("ROLE_USER")));
 		accessor.setUser(userPrincipalToken);

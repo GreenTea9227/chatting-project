@@ -17,7 +17,9 @@ import com.kor.syh.notification.domain.Notify;
 import com.kor.syh.notification.domain.NotifyType;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationManagementService implements NotificationUseCase {
@@ -46,6 +48,7 @@ public class NotificationManagementService implements NotificationUseCase {
 		sseEmitter.onCompletion(() -> deleteNotificationChannel(memberId));
 
 		sendDummyMessage(sseEmitter, memberId);
+		log.info("create sseEmitter - memberId : [{}]",memberId);
 		return sseEmitter;
 	}
 
@@ -55,6 +58,7 @@ public class NotificationManagementService implements NotificationUseCase {
 			notificationPersistencePort.deleteById(memberId);
 			messageManagementPort.removeSubscribe(memberId);
 		} catch (Exception e) {
+			log.error("delete notification channel error - memberId : [{}]",memberId);
 			throw new NotificationDeletionException("Failed to delete notification channel", e);
 		}
 	}

@@ -19,7 +19,9 @@ import com.kor.syh.notification.application.port.out.notification.SendNotificati
 import com.kor.syh.notification.domain.NotifyType;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MessageProcessingService implements SendNotificationUseCase, ReceiveNotificationUseCase {
@@ -56,6 +58,7 @@ public class MessageProcessingService implements SendNotificationUseCase, Receiv
 									  .id(command.getId())
 									  .name(command.getType().name())
 									  .data(command.getContent()));
+			log.info("send sseEmitter {}",command.getId());
 		} catch (IOException e) {
 			notificationPersistencePort.deleteById(receiver);
 			throw new FailSendSseEmitterException(e.getMessage());

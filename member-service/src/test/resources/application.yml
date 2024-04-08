@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: member-service
+  profiles:
+    include: auth,common
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false
+
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+
+redis:
+  host: localhost
+  port: 6379
+  database: 0
+
+login:
+  timeout: 3600000
