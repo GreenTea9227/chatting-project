@@ -1,16 +1,10 @@
 name: build
 
 on:
-  workflow_dispatch:
   push:
     paths-ignore:
       - '**/README.md'
       - '.github/workflows/**'
-  pull_request:
-    paths-ignore:
-      - '**/README.md'
-      - '.github/workflows/**'
-
 jobs:
   build:
     runs-on: ubuntu-latest
