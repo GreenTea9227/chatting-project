@@ -1,0 +1,15 @@
+plugins {
+    id("com.palantir.docker") version "0.36.0"
+}
+
+version = '1.0.0'
+
+docker {
+    name project.name + ":" + project.version
+    dockerfile file('../Dockerfile')
+    files tasks.bootJar.outputs.files
+    buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
+}
+
+bootJar { enabled = true }
+jar { enabled = false }
