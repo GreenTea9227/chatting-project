@@ -1,19 +1,11 @@
-package com.kor.syh.chat;
+package com.kor.syh.testsupport;
 
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import com.kor.syh.ClearExtension;
-
-@ExtendWith(ClearExtension.class)
-@Import(ClearDatabase.class)
-@SpringBootTest
 public abstract class IntegrationTestContainers {
 
 	static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo")
