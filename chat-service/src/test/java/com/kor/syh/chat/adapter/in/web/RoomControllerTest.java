@@ -33,7 +33,7 @@ class RoomControllerTest extends IntegrationTestEnvironment {
 		perform
 			.andExpect(jsonPath("$.data.roomId").isNotEmpty())
 			.andExpect(jsonPath("$.status").value("success"))
-			.andExpect(jsonPath("$.message").isEmpty());
+			.andExpect(jsonPath("$.message").value("success"));
 
 		MvcResult mvcResult = perform.andReturn();
 		String responseContent = mvcResult.getResponse().getContentAsString();

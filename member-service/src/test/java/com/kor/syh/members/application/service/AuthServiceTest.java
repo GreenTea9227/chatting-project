@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.kor.syh.common.UnitTest;
 import com.kor.syh.common.jwt.JwtCreateRequestDto;
 import com.kor.syh.common.jwt.JwtUtils;
 import com.kor.syh.member.adapter.out.exception.PasswordMisMatchException;
@@ -20,6 +21,7 @@ import com.kor.syh.member.application.port.out.member.TokenStoragePort;
 import com.kor.syh.member.application.service.AuthService;
 import com.kor.syh.member.domain.Member;
 
+@UnitTest
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 

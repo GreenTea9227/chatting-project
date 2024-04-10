@@ -20,6 +20,12 @@ spring:
     hibernate:
       ddl-auto: create
     generate-ddl: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+
 
 eureka:
   client:
@@ -29,10 +35,7 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka
 
 
-redis:
-  host: localhost
-  port: 6379
-  database: 0
+
 
 management:
   endpoints:

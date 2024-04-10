@@ -21,7 +21,7 @@ public class MemberControllerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(Exception.class)
 	public CommonResponse<?> handleMemberNotFoundException(Exception e) {
-		return CommonResponse.fail("잘못된 요청입니다.");
+		return CommonResponse.fail(e.getMessage());
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

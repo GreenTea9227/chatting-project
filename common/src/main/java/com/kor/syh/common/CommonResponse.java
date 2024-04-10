@@ -19,7 +19,7 @@ public class CommonResponse<T> {
 	private final String message;
 
 	public static <T> CommonResponse<T> success(T data, String message) {
-		return CommonResponse.of(SUCCESS_STATUS, data, null);
+		return CommonResponse.of(SUCCESS_STATUS, data, message);
 	}
 
 	public static CommonResponse<?> success(String message) {

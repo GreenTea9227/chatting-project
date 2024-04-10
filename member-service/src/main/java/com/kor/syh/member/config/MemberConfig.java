@@ -3,6 +3,7 @@ package com.kor.syh.member.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -24,7 +25,11 @@ public class MemberConfig {
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
+		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(
+			redisProperties.getHost(),
+			redisProperties.getPort());
+		redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
+		return new LettuceConnectionFactory(redisStandaloneConfiguration);
 	}
 
 	@Bean
