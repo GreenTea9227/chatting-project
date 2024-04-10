@@ -9,11 +9,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.kor.syh.chat.IntegrationTestContainers;
+import com.kor.syh.testsupport.IntegrationTestEnvironment;
 import com.kor.syh.chat.domain.Message;
 import com.kor.syh.chat.domain.MessageType;
+import com.kor.syh.common.UnitTest;
 
-class MessageRepositoryTest extends IntegrationTestContainers {
+@UnitTest
+class MessageRepositoryTest extends IntegrationTestEnvironment {
 
 	@Autowired
 	private MessageRepository messageRepository;

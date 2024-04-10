@@ -7,7 +7,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class ClearExtension implements AfterEachCallback {
 
 	@Override
-	public void afterEach(ExtensionContext context) throws Exception {
+	public void afterEach(ExtensionContext context) {
 		ClearDatabase databaseCleaner = getDataCleaner(context);
 		databaseCleaner.clear();
 	}

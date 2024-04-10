@@ -7,10 +7,12 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.kor.syh.chat.IntegrationTestContainers;
+import com.kor.syh.testsupport.IntegrationTestEnvironment;
 import com.kor.syh.chat.domain.Room;
+import com.kor.syh.common.UnitTest;
 
-class RoomRepositoryTest extends IntegrationTestContainers {
+@UnitTest
+class RoomRepositoryTest extends IntegrationTestEnvironment {
 
 	@Autowired
 	private RoomRepository roomRepository;

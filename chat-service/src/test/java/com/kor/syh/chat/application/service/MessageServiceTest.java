@@ -17,7 +17,9 @@ import com.kor.syh.chat.application.port.out.SendMessagePort;
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
 import com.kor.syh.chat.domain.Message;
 import com.kor.syh.chat.domain.MessageType;
+import com.kor.syh.common.UnitTest;
 
+@UnitTest
 @ExtendWith(MockitoExtension.class)
 class MessageServiceTest {
 
