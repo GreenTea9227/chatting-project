@@ -2,6 +2,14 @@ name: build
 
 on:
   push:
+    branches:
+      - 'main'
+    paths-ignore:
+      - '**/README.md'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - '*'
     paths-ignore:
       - '**/README.md'
       - '.github/workflows/**'
