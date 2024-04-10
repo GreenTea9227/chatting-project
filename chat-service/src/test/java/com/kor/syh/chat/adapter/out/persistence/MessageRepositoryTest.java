@@ -5,30 +5,22 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.context.annotation.Import;
 
-import com.kor.syh.chat.MongoTestContainers;
+import com.kor.syh.testsupport.IntegrationTestEnvironment;
 import com.kor.syh.chat.domain.Message;
 import com.kor.syh.chat.domain.MessageType;
+import com.kor.syh.common.UnitTest;
 
-@Import({MessageRepository.class, MessageMapper.class})
-@DataMongoTest
-class MessageRepositoryTest extends MongoTestContainers {
+@UnitTest
+class MessageRepositoryTest extends IntegrationTestEnvironment {
 
 	@Autowired
 	private MessageRepository messageRepository;
 	@Autowired
 	private SpringMongoChatRepository springMongoChatRepository;
-
-	@BeforeEach
-	void setUp() {
-		springMongoChatRepository.deleteAll();
-	}
 
 	@DisplayName("save message")
 	@Test

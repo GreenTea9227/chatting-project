@@ -56,6 +56,5 @@ public class AuthService implements LoginMemberUseCase, LogoutMemberUseCase {
 
 		tokenStoragePort.deleteToken(userId);
 		logoutStatusPort.logout(userId, clientIp);
-
 	}
 }

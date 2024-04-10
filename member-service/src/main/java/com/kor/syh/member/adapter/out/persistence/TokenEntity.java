@@ -1,5 +1,6 @@
 package com.kor.syh.member.adapter.out.persistence;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -17,6 +18,8 @@ public class TokenEntity extends BaseEntity {
 
 	@Id
 	private String id;
+
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String accessToken;
 
 	@ManyToOne(fetch = FetchType.LAZY)

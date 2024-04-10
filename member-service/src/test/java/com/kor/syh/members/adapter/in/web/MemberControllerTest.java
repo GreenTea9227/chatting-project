@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kor.syh.common.UnitTest;
 import com.kor.syh.member.adapter.in.web.LoginMemberRequest;
 import com.kor.syh.member.adapter.in.web.MemberController;
 import com.kor.syh.member.adapter.in.web.RegisterMemberRequest;
@@ -33,6 +34,7 @@ import com.kor.syh.member.application.port.in.auth.LogoutMemberUseCase;
 import com.kor.syh.member.application.port.in.member.FindMemberUseCase;
 import com.kor.syh.member.application.port.in.member.RegisterMemberUseCase;
 
+@UnitTest
 @AutoConfigureMockMvc
 @SpringBootTest
 class MemberControllerTest {
@@ -54,11 +56,6 @@ class MemberControllerTest {
 
 	@MockBean
 	private LogoutMemberUseCase logoutMemberUseCase;
-
-	@AfterEach
-	void cleaningData() {
-
-	}
 
 	@DisplayName("회원 가입")
 	@Nested
@@ -143,7 +140,7 @@ class MemberControllerTest {
 				   .andExpect(handler().methodName("login"))
 				   .andExpect(jsonPath("$.status").value("success"))
 				   .andExpect(jsonPath("$.data.accessToken").value(jwtToken))
-				   .andExpect(jsonPath("$.message").isEmpty());
+				   .andExpect(jsonPath("$.message").value("로그인 성공"));
 		}
 
 		@DisplayName("로그인 실패")

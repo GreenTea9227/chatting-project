@@ -13,6 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -75,18 +76,10 @@ public class JwtUtils {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			return true;
-		} catch (MalformedJwtException ex) {
-			log.error("Invalid JWT token");
-			throw ex;
-		} catch (ExpiredJwtException ex) {
-			log.error("Expired JWT token");
-			throw ex;
-		} catch (UnsupportedJwtException ex) {
-			log.error("Unsupported JWT token");
-			throw ex;
-		} catch (IllegalArgumentException ex) {
-			log.error("JWT claims string is empty.");
-			throw ex;
+		} catch (MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException |
+				 SignatureException ex) {
+			log.error("Invalid JWT token", ex);
+			return false;
 		}
 	}
 

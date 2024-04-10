@@ -22,3 +22,12 @@ custom:
     TOPIC_ID: chat
     GROUP_ID: group_chat
     SERVER: localhost:9092
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG

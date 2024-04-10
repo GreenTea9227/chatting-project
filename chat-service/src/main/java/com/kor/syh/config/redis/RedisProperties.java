@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "redis")
+@ConfigurationProperties(prefix = "spring.data.redis")
 public class RedisProperties {
 	private String host;
 	private int port;

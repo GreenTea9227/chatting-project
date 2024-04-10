@@ -21,11 +21,14 @@ spring:
     hibernate:
       ddl-auto: create
     generate-ddl: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
 
-redis:
-  host: localhost
-  port: 6379
-  database: 0
+
+
 
 login:
   timeout: 3600000

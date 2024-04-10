@@ -16,7 +16,9 @@ import com.kor.syh.chat.adapter.in.web.RoomResponseDto;
 import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
 import com.kor.syh.chat.application.port.out.ManageRoomPort;
 import com.kor.syh.chat.domain.Room;
+import com.kor.syh.common.UnitTest;
 
+@UnitTest
 @ExtendWith(MockitoExtension.class)
 class RoomServiceTest {
 

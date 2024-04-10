@@ -30,6 +30,7 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
+
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
@@ -38,6 +39,8 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
     }
 
     ext {
@@ -53,14 +56,26 @@ subprojects {
     tasks.named('test') {
         useJUnitPlatform()
     }
-    bootJar { enabled = false }
-    jar { enabled = true }
+
 }
 
 ext {
     springCloudVersion = "2022.0.5"
     jjwtVersion = '0.11.5'
     tsidCreatorVersion = '5.2.6'
+}
+
+project(":common") {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
+        implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
+        //JWT
+        implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+        runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+        runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+    }
 }
 
 project(':notification-service') {
@@ -82,6 +97,7 @@ project(':notification-service') {
         implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
     }
+
 }
 
 project(':member-service') {
@@ -112,8 +128,16 @@ project(':member-service') {
         // ID generator
         implementation 'com.github.f4b6a3:tsid-creator:' + tsidCreatorVersion
 
+        // Test
+        testImplementation "org.testcontainers:testcontainers:1.19.7"
+        testImplementation "com.redis:testcontainers-redis:2.2.2"
+        testImplementation(testFixtures(project(":common")))
+        testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.15")
+        testImplementation("com.navercorp.fixturemonkey:fixture-monkey-jakarta-validation:1.0.14")
+
 
     }
+
 }
 
 project(':gateway-service') {
@@ -135,6 +159,7 @@ project(':gateway-service') {
         implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
     }
+
 }
 
 project(':discovery-service') {
@@ -143,6 +168,7 @@ project(':discovery-service') {
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 
     }
+
 }
 
 project(':config-service') {
@@ -154,6 +180,7 @@ project(':config-service') {
         implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
     }
+
 }
 
 project(':chat-service') {
@@ -191,9 +218,11 @@ project(':chat-service') {
         testImplementation "org.testcontainers:testcontainers:1.19.7"
         testImplementation 'org.testcontainers:junit-jupiter:1.19.7'
         testImplementation "org.testcontainers:mongodb:1.19.7"
+        testImplementation(testFixtures(project(":common")))
 
 
     }
+
 }
 
 

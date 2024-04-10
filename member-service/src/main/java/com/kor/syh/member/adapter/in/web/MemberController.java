@@ -2,6 +2,8 @@ package com.kor.syh.member.adapter.in.web;
 
 import java.security.Principal;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +33,7 @@ public class MemberController {
 	private final LogoutMemberUseCase logoutMemberUseCase;
 
 	@PostMapping("/register")
-	public CommonResponse<?> register(@Valid @RequestBody RegisterMemberRequest request) {
+	public ResponseEntity<CommonResponse<?>> register(@Valid @RequestBody RegisterMemberRequest request) {
 		RegisterMemberCommand command = new RegisterMemberCommand(
 			request.getLoginId(),
 			request.getPassword(),
@@ -40,7 +42,7 @@ public class MemberController {
 		);
 		registerMemberUseCase.register(command);
 
-		return CommonResponse.success("가입 성공");
+		return new ResponseEntity<>(CommonResponse.success("가입 성공"), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/login")

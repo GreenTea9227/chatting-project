@@ -13,8 +13,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.kor.syh.common.CommonResponse;
-import com.kor.syh.common.jwt.TokenException;
 import com.kor.syh.common.jwt.JwtUtils;
+import com.kor.syh.common.jwt.TokenException;
 import com.kor.syh.common.utils.JsonUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,16 +37,15 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
 			String authorizationHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 			if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
 				String token = authorizationHeader.substring(7);
-				try {
-					if (jwtUtils.isValidToken(token)) {
-						String userId = jwtUtils.parseMemberIdFromToken(token);
-						exchange.getRequest().mutate()
-								.header("X-Authorization-Id", userId)
-								.build();
-						return chain.filter(exchange); // Token is valid, continue to the next filter
-					}
-				} catch (TokenException e) {
-					log.error("Token validation error: {}", e.getMessage());
+
+				if (jwtUtils.isValidToken(token)) {
+					String userId = jwtUtils.parseMemberIdFromToken(token);
+					exchange.getRequest().mutate()
+							.header("X-Authorization-Id", userId)
+							.build();
+					return chain.filter(exchange); // Token is valid, continue to the next filter
+				} else {
+					throw new TokenException("Token validation error");
 				}
 			}
 			return unauthorizedResponse(exchange); // Token is not valid, respond with unauthorized

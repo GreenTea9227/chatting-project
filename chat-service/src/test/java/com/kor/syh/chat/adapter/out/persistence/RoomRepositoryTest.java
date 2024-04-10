@@ -4,27 +4,20 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.context.annotation.Import;
 
-import com.kor.syh.chat.MongoTestContainers;
+import com.kor.syh.testsupport.IntegrationTestEnvironment;
 import com.kor.syh.chat.domain.Room;
+import com.kor.syh.common.UnitTest;
 
-@Import({RoomMapper.class, RoomRepository.class})
-@DataMongoTest
-class RoomRepositoryTest extends MongoTestContainers {
+@UnitTest
+class RoomRepositoryTest extends IntegrationTestEnvironment {
+
 	@Autowired
 	private RoomRepository roomRepository;
 	@Autowired
 	private SpringMongoRoomRepository springMongoRoomRepository;
-
-	@BeforeEach
-	void setUp() {
-		springMongoRoomRepository.deleteAll();
-	}
 
 	@Test
 	void saveRoom() {
