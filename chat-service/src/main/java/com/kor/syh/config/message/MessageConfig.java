@@ -21,7 +21,8 @@ public class MessageConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.setErrorHandler(stompErrorHandler)
 				.addEndpoint("/ws")
-				.setAllowedOriginPatterns("*");
+				.setAllowedOriginPatterns("*")
+				.withSockJS();
 	}
 
 	@Override
