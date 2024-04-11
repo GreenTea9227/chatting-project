@@ -35,8 +35,10 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.kor.syh.chat.adapter.in.web.MessageDto;
 import com.kor.syh.chat.application.port.in.HandleMessageUseCase;
 import com.kor.syh.chat.domain.MessageType;
+import com.kor.syh.common.UnitTest;
 import com.kor.syh.common.jwt.JwtUtils;
 
+@UnitTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StompTest {
 

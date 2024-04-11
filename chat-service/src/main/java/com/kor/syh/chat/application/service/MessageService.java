@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.f4b6a3.tsid.TsidCreator;
 import com.kor.syh.chat.adapter.in.web.MessageDto;
 import com.kor.syh.chat.application.port.in.HandleMessageUseCase;
-import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
+import com.kor.syh.chat.application.port.out.RoomCachePort;
 import com.kor.syh.chat.application.port.out.SaveMessagePort;
 import com.kor.syh.chat.application.port.out.SendMessagePort;
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class MessageService implements HandleMessageUseCase {
 
 	private final ProduceMessageBrokerPort produceMessageBrokerPort;
-	private final ManageRoomParticipantPort roomPort;
+	private final RoomCachePort roomPort;
 	private final SaveMessagePort saveMessagePort;
 	private final SendMessagePort sendMessagePort;
 
@@ -50,7 +50,7 @@ public class MessageService implements HandleMessageUseCase {
 	public void sendMessageToUser(MessageDto messageDto) {
 		sendMessagePort.sendMessage(messageDto);
 
-		//notification TODO
+		//notification TODO 알림 구현
 		//sendNotificationPort.sendNotification(messageDto.getRoomId(), messageDto.getContent());
 
 	}

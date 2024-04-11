@@ -5,4 +5,5 @@ import com.kor.syh.chat.adapter.in.web.RoomResponseDto;
 public interface HandlerRoomUseCase {
 	RoomResponseDto createRoom(String userId);
 
+	void enterRoom(String roomId, String userId);
 }

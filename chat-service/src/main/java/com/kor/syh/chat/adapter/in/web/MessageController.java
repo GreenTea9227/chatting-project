@@ -33,7 +33,7 @@ public class MessageController {
 	public void enter(@DestinationVariable("roomId") String roomId, MessageDto message, Principal principal) {
 
 		log.info("roomId: {} , enter message : {}", roomId, message);
-		participateRoomUseCase.participate(roomId, principal.getName());
+		participateRoomUseCase.enterRoom(roomId,principal.getName());
 		handleMessageUseCase.publishMessage(message);
 	}
 

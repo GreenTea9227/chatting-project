@@ -1,5 +1,7 @@
 package com.kor.syh.chat.adapter.in.web;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,14 @@ public class RoomController {
 
 		RoomResponseDto roomResponseDto = handlerRoomUseCase.createRoom(userId);
 		return CommonResponse.success(roomResponseDto, "success");
+	}
+
+	@GetMapping("/rooms/{roomId}")
+	public CommonResponse<?> enterRoom(
+		@PathVariable("roomId") String roomId,
+		@RequestHeader("X-Authorization-Id") String userId) {
+		handlerRoomUseCase.enterRoom(roomId,userId);
+		return CommonResponse.success("success");
 	}
 
 }

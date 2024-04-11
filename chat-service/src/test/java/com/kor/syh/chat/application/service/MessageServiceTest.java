@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.kor.syh.chat.adapter.in.web.MessageDto;
-import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
+import com.kor.syh.chat.application.port.out.RoomCachePort;
 import com.kor.syh.chat.application.port.out.SaveMessagePort;
 import com.kor.syh.chat.application.port.out.SendMessagePort;
 import com.kor.syh.chat.application.port.out.kafka.ProduceMessageBrokerPort;
@@ -30,7 +30,7 @@ class MessageServiceTest {
 	@Mock
 	private SaveMessagePort saveMessagePort;
 	@Mock
-	private ManageRoomParticipantPort roomPort;
+	private RoomCachePort roomPort;
 
 	@Mock
 	private SendMessagePort sendMessagePort;

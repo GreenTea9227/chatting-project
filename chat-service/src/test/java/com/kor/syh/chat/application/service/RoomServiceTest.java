@@ -13,8 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.kor.syh.chat.adapter.in.web.RoomResponseDto;
-import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
-import com.kor.syh.chat.application.port.out.ManageRoomPort;
+import com.kor.syh.chat.application.port.out.RoomCachePort;
+import com.kor.syh.chat.application.port.out.RoomPersistencePort;
 import com.kor.syh.chat.domain.Room;
 import com.kor.syh.common.UnitTest;
 
@@ -26,9 +26,9 @@ class RoomServiceTest {
 	private RoomService roomService;
 
 	@Mock
-	private ManageRoomPort manageRoomPort;
+	private RoomPersistencePort roomPersistencePort;
 	@Mock
-	private ManageRoomParticipantPort manageRoomParticipantPort;
+	private RoomCachePort roomCachePort;
 
 	@DisplayName("success save room")
 	@Test
@@ -36,16 +36,16 @@ class RoomServiceTest {
 
 		// given
 		String userId = UUID.randomUUID().toString();
-		doNothing().when(manageRoomPort).saveRoom(any(Room.class));
-		doNothing().when(manageRoomParticipantPort).createRoom(any(String.class), eq(userId));
+		doNothing().when(roomPersistencePort).saveRoom(any(Room.class));
+		doNothing().when(roomCachePort).createRoom(any(String.class), eq(userId));
 
 		// when
 		RoomResponseDto roomResponseDto = roomService.createRoom(userId);
 
 		// then
 
-		verify(manageRoomPort, times(1)).saveRoom(any(Room.class));
-		verify(manageRoomParticipantPort, times(1)).createRoom(any(String.class), eq(userId));
+		verify(roomPersistencePort, times(1)).saveRoom(any(Room.class));
+		verify(roomCachePort, times(1)).createRoom(any(String.class), eq(userId));
 		assertThat(roomResponseDto.getRoomId()).isNotBlank();
 
 	}

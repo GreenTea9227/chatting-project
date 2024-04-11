@@ -5,13 +5,13 @@ import static com.kor.syh.common.constant.RedisKey.*;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
+import com.kor.syh.chat.application.port.out.RoomCachePort;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class ManageRoomAdapter implements ManageRoomParticipantPort {
+public class RoomAdapter implements RoomCachePort {
 
 	private final RedisTemplate<String, Object> redisTemplate;
 
@@ -21,7 +21,7 @@ public class ManageRoomAdapter implements ManageRoomParticipantPort {
 	}
 
 	@Override
-	public void participate(String roomId, String userId) {
+	public void enterRoom(String roomId, String userId) {
 		redisTemplate.opsForHash().put(ROOM_PREFIX + roomId, userId, "1");
 	}
 

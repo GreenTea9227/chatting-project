@@ -8,8 +8,8 @@ import com.kor.syh.chat.adapter.in.web.RoomResponseDto;
 import com.kor.syh.chat.application.port.in.ExitRoomUseCase;
 import com.kor.syh.chat.application.port.in.HandlerRoomUseCase;
 import com.kor.syh.chat.application.port.in.ParticipateRoomUseCase;
-import com.kor.syh.chat.application.port.out.ManageRoomParticipantPort;
-import com.kor.syh.chat.application.port.out.ManageRoomPort;
+import com.kor.syh.chat.application.port.out.RoomCachePort;
+import com.kor.syh.chat.application.port.out.RoomPersistencePort;
 import com.kor.syh.chat.domain.Room;
 
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @Service
 public class RoomService implements HandlerRoomUseCase, ParticipateRoomUseCase, ExitRoomUseCase {
-	private final ManageRoomPort manageRoomPort;
-	private final ManageRoomParticipantPort manageRoomParticipantPort;
+	private final RoomPersistencePort roomPersistencePort;
+	private final RoomCachePort roomCachePort;
 
 	@Override
 	public RoomResponseDto createRoom(String userId) {
@@ -28,20 +28,22 @@ public class RoomService implements HandlerRoomUseCase, ParticipateRoomUseCase, 
 						.roomId(roomId)
 						.creatorId(userId)
 						.build();
-		manageRoomPort.saveRoom(room);
-		manageRoomParticipantPort.createRoom(roomId, userId);
+		roomPersistencePort.saveRoom(room);
+		roomCachePort.createRoom(roomId, userId);
 		return RoomResponseDto.of(roomId);
 	}
 
 	@Override
-	public void participate(String roomId, String userId) {
-		manageRoomParticipantPort.participate(roomId, userId);
+	public void enterRoom(String roomId, String userId) {
+		roomCachePort.enterRoom(roomId, userId);
+		roomPersistencePort.addParticipant(roomId, userId);
 		//TODO 1.밀린 메시지 가져오기 2.notification 보내기
 	}
 
 	@Override
 	public void exit(String roomId, String userId) {
-		manageRoomParticipantPort.exit(roomId, userId);
+		roomCachePort.exit(roomId, userId);
+		roomPersistencePort.exitRoom(roomId, userId);
 	}
 
 }

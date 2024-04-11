@@ -1,9 +1,9 @@
 package com.kor.syh.chat.application.port.out;
 
-public interface ManageRoomParticipantPort {
+public interface RoomCachePort {
 	void createRoom(String roomId, String userId);
 
-	void participate(String roomId, String userId);
+	void enterRoom(String roomId, String userId);
 
 	void exit(String roomId, String userId);
 

@@ -3,22 +3,25 @@ package com.kor.syh.chat.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.kor.syh.testsupport.IntegrationTestEnvironment;
 import com.kor.syh.chat.domain.Room;
 import com.kor.syh.common.UnitTest;
+import com.kor.syh.testsupport.IntegrationTestEnvironment;
 
 @UnitTest
 class RoomRepositoryTest extends IntegrationTestEnvironment {
 
 	@Autowired
-	private RoomRepository roomRepository;
+	private RoomPersistenceRepository roomRepository;
 	@Autowired
 	private SpringMongoRoomRepository springMongoRoomRepository;
 
+	@DisplayName("Save Room Test")
 	@Test
 	void saveRoom() {
 		//given
@@ -39,6 +42,7 @@ class RoomRepositoryTest extends IntegrationTestEnvironment {
 
 	}
 
+	@DisplayName("Delete Room Test")
 	@Test
 	void deleteRoom() {
 		//given
@@ -50,4 +54,50 @@ class RoomRepositoryTest extends IntegrationTestEnvironment {
 		//then
 		assertThat(springMongoRoomRepository.existsById(roomDocument.getRoomId())).isFalse();
 	}
+
+	@DisplayName("Add Participant Test")
+	@Test
+	void addParticipant() {
+		// given
+		String roomId = "roomId";
+		String firstId = "firstId";
+		String secondId = "secondId";
+		RoomDocument roomDocument = springMongoRoomRepository.save(RoomDocument.builder()
+																			   .roomId(roomId)
+																			   .build());
+
+		// when
+		roomRepository.addParticipant(roomDocument.getRoomId(), firstId);
+		roomRepository.addParticipant(roomDocument.getRoomId(), firstId);
+		roomRepository.addParticipant(roomDocument.getRoomId(), secondId);
+
+		// then
+		RoomDocument findRoom = springMongoRoomRepository.findById(roomId).orElseThrow();
+
+		assertThat(findRoom.getParticipants()).size().isEqualTo(2);
+		assertThat(findRoom.getParticipants()).containsExactly(firstId, secondId);
+	}
+
+	@DisplayName("exit room test")
+	@Test
+	void exitRoom() {
+		// given
+		String roomId = "roomId";
+		String firstId = "firstId";
+		String secondId = "secondId";
+		String thirdId = "thirdId";
+		RoomDocument roomDocument = springMongoRoomRepository.save(RoomDocument.builder()
+																			   .roomId(roomId)
+																			   .participants(List.of(firstId, secondId,thirdId))
+																			   .build());
+		// when
+		roomRepository.exitRoom(roomId,secondId);
+
+		// then
+		RoomDocument findRoom = springMongoRoomRepository.findById(roomId).orElseThrow();
+
+		assertThat(findRoom.getParticipants()).size().isEqualTo(2);
+		assertThat(findRoom.getParticipants()).containsExactly(firstId, thirdId);
+	}
+
 }

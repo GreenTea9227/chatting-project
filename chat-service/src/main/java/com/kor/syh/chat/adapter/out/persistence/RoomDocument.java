@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class RoomDocument implements Persistable<String> {
 	@Id
 	private String roomId;
-	private List<ObjectId> participants;
+	private List<String> participants;
 
 	@CreatedDate
 	private LocalDateTime createDate;
