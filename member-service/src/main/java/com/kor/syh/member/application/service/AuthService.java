@@ -7,6 +7,7 @@ import com.kor.syh.common.jwt.JwtCreateRequestDto;
 import com.kor.syh.common.jwt.JwtUtils;
 import com.kor.syh.member.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.member.application.port.in.auth.LoginMemberUseCase;
+import com.kor.syh.member.application.port.in.auth.TokenInfo;
 import com.kor.syh.member.application.port.out.member.FindMemberPort;
 import com.kor.syh.member.domain.Member;
 import com.kor.syh.member.application.port.in.auth.LogoutMemberUseCase;
@@ -29,25 +30,26 @@ public class AuthService implements LoginMemberUseCase, LogoutMemberUseCase {
 
 
 	@Override
-	public String login(String loginId, String password, String clientIp) {
+	public TokenInfo login(String loginId, String password, String clientIp) {
 		Member member = findMemberPort.findByLoginId(loginId);
 
 		if (!passwordEncoder.matches(password, member.getPassword())) {
 			throw new PasswordMisMatchException("Password is not matched");
 		}
 
-
 		JwtCreateRequestDto requestDto = JwtCreateRequestDto.builder()
 															.username(member.getUsername())
 															.id(member.getId())
 															.build();
-		String token = jwtUtils.generateJwtToken(requestDto);
+		String accessToken = jwtUtils.generateJwtToken(requestDto);
+		String refreshToken = jwtUtils.generateRefreshToken(requestDto);
+
+		tokenStoragePort.saveToken(member.getId(),refreshToken);
 
 		//TODO 사용자 기기 정보 식별
-		tokenStoragePort.saveToken(member.getId(),token);
 		loginStatusPort.login(member.getId(), clientIp);
 
-		return token;
+		return new TokenInfo(accessToken,refreshToken);
 
 	}
 

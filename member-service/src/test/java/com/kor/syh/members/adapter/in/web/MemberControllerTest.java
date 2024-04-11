@@ -31,8 +31,10 @@ import com.kor.syh.member.adapter.in.web.RegisterMemberRequest;
 import com.kor.syh.member.adapter.out.exception.MemberNotFoundException;
 import com.kor.syh.member.application.port.in.auth.LoginMemberUseCase;
 import com.kor.syh.member.application.port.in.auth.LogoutMemberUseCase;
+import com.kor.syh.member.application.port.in.auth.TokenInfo;
 import com.kor.syh.member.application.port.in.member.FindMemberUseCase;
 import com.kor.syh.member.application.port.in.member.RegisterMemberUseCase;
+
 
 @UnitTest
 @AutoConfigureMockMvc
@@ -126,8 +128,10 @@ class MemberControllerTest {
 			LoginMemberRequest request = new LoginMemberRequest(loginId, password);
 			String requestStr = objectMapper.writeValueAsString(request);
 
-			String jwtToken = "jwt-token-value";
-			when(loginMemberUseCase.login(eq(loginId), eq(password), any())).thenReturn(jwtToken);
+			String accessToken = "accessToken-value";
+			String refreshToken = "refresh-token-value";
+			TokenInfo tokenInfo = new TokenInfo(accessToken,refreshToken);
+			when(loginMemberUseCase.login(eq(loginId), eq(password), any())).thenReturn(tokenInfo);
 
 			// when
 			ResultActions perform = mvc.perform(post("/login")
@@ -139,7 +143,8 @@ class MemberControllerTest {
 				   .andExpect(handler().handlerType(MemberController.class))
 				   .andExpect(handler().methodName("login"))
 				   .andExpect(jsonPath("$.status").value("success"))
-				   .andExpect(jsonPath("$.data.accessToken").value(jwtToken))
+				   .andExpect(jsonPath("$.data.accessToken").value(accessToken))
+				   .andExpect(jsonPath("$.data.refreshToken").value(refreshToken))
 				   .andExpect(jsonPath("$.message").value("로그인 성공"));
 		}
 

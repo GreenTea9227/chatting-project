@@ -51,15 +51,16 @@ public class JwtUtils {
 				   .compact();
 	}
 
-	public String generateRefreshToken(String userId) {
+	public String generateRefreshToken(JwtCreateRequestDto dto) {
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + tokenValidityInSeconds2);
 
 		return Jwts.builder()
-				   .setSubject(userId)
+				   .setSubject(dto.getId())
 				   .setIssuedAt(now)
 				   .setExpiration(expiryDate)
 				   .signWith(key, SignatureAlgorithm.HS512)
+				   .claim("username", dto.getUsername())
 				   .compact();
 	}
 
@@ -76,11 +77,15 @@ public class JwtUtils {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			return true;
-		} catch (MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException |
-				 SignatureException ex) {
-			log.error("Invalid JWT token", ex);
-			return false;
+		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+			log.error("Invalid JWT Token", e);
+		} catch (ExpiredJwtException e) {
+			log.error("Expired JWT Token", e);
+		} catch (UnsupportedJwtException e) {
+			log.error("Unsupported JWT Token", e);
+		} catch (IllegalArgumentException e) {
+			log.error("JWT claims string is empty.", e);
 		}
+		return false;
 	}
-
 }
