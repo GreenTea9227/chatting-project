@@ -1,4 +1,4 @@
-package com.kor.syh.config;
+package com.kor.syh.config.message;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -15,10 +15,13 @@ import lombok.RequiredArgsConstructor;
 public class MessageConfig implements WebSocketMessageBrokerConfigurer {
 
 	private final MessageInterceptor messageInterceptor;
+	private final StompErrorHandler stompErrorHandler;
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/ws").setAllowedOriginPatterns("*");
+		registry.setErrorHandler(stompErrorHandler)
+				.addEndpoint("/ws")
+				.setAllowedOriginPatterns("*");
 	}
 
 	@Override

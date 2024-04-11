@@ -1,10 +1,10 @@
-package com.kor.syh.config;
+package com.kor.syh.config.message;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -63,8 +63,12 @@ public class MessageInterceptor implements ChannelInterceptor {
 				log.info("유저 ID '[{}]' : send message ", userId);
 			}
 			case DISCONNECT -> {
-				String userId = accessor.getUser().getName();
-				UserPrincipalToken user = (UserPrincipalToken)accessor.getUser();
+
+				Principal principal = accessor.getUser();
+				if (principal == null)
+					return;
+				String userId = principal.getName();
+				UserPrincipalToken user = (UserPrincipalToken)principal;
 				log.info("유저 ID '{}'가 방 '{}'에 퇴장", userId, user.getRoomId());
 			}
 
@@ -74,7 +78,7 @@ public class MessageInterceptor implements ChannelInterceptor {
 	private String extractUserIdFromToken(StompHeaderAccessor accessor) {
 		String authorizationHeader = String.valueOf(accessor.getNativeHeader("Authorization"));
 		if (authorizationHeader == null || authorizationHeader.equals("null")) {
-			throw new MessageDeliveryException("메세지 예외");
+			throw new TokenException("권한 없음");
 		}
 		String token = authorizationHeader.substring(7);
 		if (!jwtUtils.isValidToken(token)) {
