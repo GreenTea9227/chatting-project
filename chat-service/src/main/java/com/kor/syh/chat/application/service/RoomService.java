@@ -1,15 +1,20 @@
 package com.kor.syh.chat.application.service;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.f4b6a3.tsid.TsidCreator;
+import com.kor.syh.chat.adapter.in.web.PageDto;
 import com.kor.syh.chat.adapter.in.web.RoomResponseDto;
 import com.kor.syh.chat.application.port.in.ExitRoomUseCase;
 import com.kor.syh.chat.application.port.in.HandlerRoomUseCase;
 import com.kor.syh.chat.application.port.in.ParticipateRoomUseCase;
 import com.kor.syh.chat.application.port.out.RoomCachePort;
 import com.kor.syh.chat.application.port.out.RoomPersistencePort;
+import com.kor.syh.chat.application.port.out.RoomsDto;
 import com.kor.syh.chat.domain.Room;
 
 import lombok.RequiredArgsConstructor;
@@ -34,11 +39,20 @@ public class RoomService implements HandlerRoomUseCase, ParticipateRoomUseCase, 
 	}
 
 	@Override
+	public Slice<RoomsDto> getRooms(PageDto pageDto) {
+		PageRequest pageRequest = PageRequest.of(pageDto.getPage(), pageDto.getSize(),
+			Sort.by("cratedDate").descending());
+		return roomPersistencePort.findRoomsByPageable(pageRequest);
+	}
+
+
+	@Override
 	public void enterRoom(String roomId, String userId) {
 		roomCachePort.enterRoom(roomId, userId);
 		roomPersistencePort.addParticipant(roomId, userId);
 		//TODO 1.밀린 메시지 가져오기 2.notification 보내기
 	}
+
 
 	@Override
 	public void exit(String roomId, String userId) {
