@@ -35,7 +35,6 @@ public class AuthService implements LoginMemberUseCase, LogoutMemberUseCase {
 	public TokenInfo login(String loginId, String password, String clientIp) {
 		Member member = findMemberPort.findByLoginId(loginId);
 
-
 		if (!passwordEncoder.matches(password, member.getPassword())) {
 			throw new PasswordMisMatchException("Password is not matched");
 		}

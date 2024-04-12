@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.kor.syh.common.CommonResponse;
+import com.kor.syh.member.adapter.out.exception.DuplicateLoginIdException;
 import com.kor.syh.member.adapter.out.exception.MemberNotFoundException;
 
-import javassist.bytecode.DuplicateMemberException;
 
 @RestControllerAdvice
 public class MemberControllerAdvice {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({MemberNotFoundException.class, DuplicateMemberException.class})
+	@ExceptionHandler({MemberNotFoundException.class, DuplicateLoginIdException.class})
 	public CommonResponse<?> handleMemberNotFoundException(MemberNotFoundException e) {
 		return CommonResponse.fail(e.getMessage());
 	}

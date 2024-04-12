@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,6 @@ import com.kor.syh.member.application.port.in.auth.LogoutMemberUseCase;
 import com.kor.syh.member.application.port.in.auth.TokenInfo;
 import com.kor.syh.member.application.port.in.member.FindMemberUseCase;
 import com.kor.syh.member.application.port.in.member.RegisterMemberUseCase;
-
 
 @UnitTest
 @AutoConfigureMockMvc
@@ -130,7 +128,7 @@ class MemberControllerTest {
 
 			String accessToken = "accessToken-value";
 			String refreshToken = "refresh-token-value";
-			TokenInfo tokenInfo = new TokenInfo(accessToken,refreshToken);
+			TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
 			when(loginMemberUseCase.login(eq(loginId), eq(password), any())).thenReturn(tokenInfo);
 
 			// when
@@ -154,11 +152,11 @@ class MemberControllerTest {
 			// given
 			String password = "1111111";
 			String loginId = "loginId";
-			String ip = "0.0.0.0";
+
 			LoginMemberRequest request = new LoginMemberRequest(loginId, password);
 			String requestStr = objectMapper.writeValueAsString(request);
 			when(loginMemberUseCase.login(eq(request.getLoginId()), eq(request.getPassword()), any())).thenThrow(
-				MemberNotFoundException.class);
+				new MemberNotFoundException("존재하지 않는 회원입니다."));
 
 			// when, then
 

@@ -171,6 +171,7 @@ public class StompTest {
 			new MessageDto("secondRoom", "123", "hello", MessageType.SEND));
 
 		//then
+		arriveMessage.get(5,SECONDS);
 		assertThat(stompSession.isConnected()).isTrue();
 		verify(jwtUtils, times(1)).isValidToken(any());
 		verify(jwtUtils, times(1)).parseMemberIdFromToken(any());
