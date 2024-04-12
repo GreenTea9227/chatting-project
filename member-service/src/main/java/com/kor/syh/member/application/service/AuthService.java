@@ -15,8 +15,10 @@ import com.kor.syh.member.application.port.out.member.LoginStatusPort;
 import com.kor.syh.member.application.port.out.member.LogoutStatusPort;
 import com.kor.syh.member.application.port.out.member.TokenStoragePort;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class AuthService implements LoginMemberUseCase, LogoutMemberUseCase {
@@ -32,6 +34,7 @@ public class AuthService implements LoginMemberUseCase, LogoutMemberUseCase {
 	@Override
 	public TokenInfo login(String loginId, String password, String clientIp) {
 		Member member = findMemberPort.findByLoginId(loginId);
+
 
 		if (!passwordEncoder.matches(password, member.getPassword())) {
 			throw new PasswordMisMatchException("Password is not matched");

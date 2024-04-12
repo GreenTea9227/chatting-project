@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kor.syh.member.adapter.in.web.RegisterMemberRequest;
+import com.kor.syh.member.adapter.out.exception.DuplicateLoginIdException;
 import com.kor.syh.member.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.member.application.port.in.member.FindMemberResponse;
 import com.kor.syh.member.application.port.in.member.FindMemberUseCase;
@@ -26,6 +27,12 @@ public class MemberService implements RegisterMemberUseCase, FindMemberUseCase {
 
 	@Override
 	public void register(RegisterMemberRequest request) {
+
+		boolean isMember = findMemberPort.isExistsMember(request.getLoginId());
+		if (isMember) {
+			throw new DuplicateLoginIdException("중복 Id입니다.");
+		}
+
 		String encodePassword = passwordEncoder.encode(request.getPassword());
 		Member member = Member.builder()
 							  .loginId(request.getLoginId())

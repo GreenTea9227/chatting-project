@@ -158,6 +158,9 @@ project(':gateway-service') {
         // Messaging
         implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
+        // Redis
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     }
 
 }

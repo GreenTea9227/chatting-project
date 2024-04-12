@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.kor.syh.common.CommonResponse;
-import com.kor.syh.common.jwt.TokenException;
 import com.kor.syh.common.utils.JsonUtil;
+import com.kor.syh.error.GatewayResponseStatusException;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -27,8 +27,8 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
 		String message = ex.getMessage();
 
-		if (ex instanceof TokenException) {
-			exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
+		if (ex instanceof GatewayResponseStatusException) {
+			exchange.getResponse().setStatusCode(((GatewayResponseStatusException)ex).getStatus());
 		} else {
 			exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
 		}

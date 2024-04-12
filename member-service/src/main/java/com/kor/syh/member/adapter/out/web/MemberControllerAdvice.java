@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.kor.syh.common.CommonResponse;
 import com.kor.syh.member.adapter.out.exception.MemberNotFoundException;
 
+import javassist.bytecode.DuplicateMemberException;
+
 @RestControllerAdvice
 public class MemberControllerAdvice {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(MemberNotFoundException.class)
+	@ExceptionHandler({MemberNotFoundException.class, DuplicateMemberException.class})
 	public CommonResponse<?> handleMemberNotFoundException(MemberNotFoundException e) {
-		return CommonResponse.fail("존재하지 않는 회원입니다.");
+		return CommonResponse.fail(e.getMessage());
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

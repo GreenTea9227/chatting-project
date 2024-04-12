@@ -45,4 +45,9 @@ public class MemberRepository implements RegisterMemberPort, FindMemberPort {
 															   .orElseThrow(MemberNotFoundException::new);
 		return mapper.toDomain(jpaEntity);
 	}
+
+	@Override
+	public boolean isExistsMember(String loginId) {
+		return memberRepository.existsByLoginId(loginId);
+	}
 }

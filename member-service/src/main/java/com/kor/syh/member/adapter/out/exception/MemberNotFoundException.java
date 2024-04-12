@@ -2,7 +2,7 @@ package com.kor.syh.member.adapter.out.exception;
 
 public class MemberNotFoundException extends RuntimeException {
 	public MemberNotFoundException() {
-		super();
+		super("회원을 찾을 수 없습니다.");
 	}
 
 	public MemberNotFoundException(String message) {
