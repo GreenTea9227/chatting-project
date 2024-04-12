@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kor.syh.common.CommonResponse;
-import com.kor.syh.common.jwt.JwtToken;
 import com.kor.syh.member.application.port.in.auth.LoginMemberUseCase;
 import com.kor.syh.member.application.port.in.auth.LogoutMemberUseCase;
+import com.kor.syh.member.application.port.in.auth.TokenInfo;
 import com.kor.syh.member.application.port.in.member.FindMemberResponse;
 import com.kor.syh.member.application.port.in.member.FindMemberUseCase;
-import com.kor.syh.member.application.port.in.member.RegisterMemberCommand;
 import com.kor.syh.member.application.port.in.member.RegisterMemberUseCase;
 import com.kor.syh.member.utils.HttpRequestUtils;
 
@@ -34,13 +33,8 @@ public class MemberController {
 
 	@PostMapping("/register")
 	public ResponseEntity<CommonResponse<?>> register(@Valid @RequestBody RegisterMemberRequest request) {
-		RegisterMemberCommand command = new RegisterMemberCommand(
-			request.getLoginId(),
-			request.getPassword(),
-			request.getUsername(),
-			request.getNickname()
-		);
-		registerMemberUseCase.register(command);
+
+		registerMemberUseCase.register(request);
 
 		return new ResponseEntity<>(CommonResponse.success("가입 성공"), HttpStatus.CREATED);
 	}
@@ -49,10 +43,9 @@ public class MemberController {
 	public CommonResponse<?> login(@Valid @RequestBody LoginMemberRequest request,
 		HttpServletRequest httpServletRequest) {
 		String clientIp = HttpRequestUtils.getClientIp(httpServletRequest);
-		String token = loginMemberUseCase.login(request.getLoginId(), request.getPassword(), clientIp);
-		JwtToken jwtToken = new JwtToken(token);
+		TokenInfo tokenInfo = loginMemberUseCase.login(request.getLoginId(), request.getPassword(), clientIp);
 
-		return CommonResponse.success(jwtToken, "로그인 성공");
+		return CommonResponse.success(tokenInfo, "로그인 성공");
 	}
 
 	@GetMapping("/logout")

@@ -10,12 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 
+import com.kor.syh.application.port.out.LoginStatusPort;
 import com.kor.syh.common.CommonResponse;
 import com.kor.syh.common.jwt.JwtUtils;
-import com.kor.syh.common.jwt.TokenException;
 import com.kor.syh.common.utils.JsonUtil;
+import com.kor.syh.error.GatewayResponseStatusException;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -25,10 +27,12 @@ import reactor.core.publisher.Mono;
 public class AuthorizationFilter extends AbstractGatewayFilterFactory<AuthorizationFilter.Config> {
 
 	private final JwtUtils jwtUtils;
+	private final LoginStatusPort loginStatusPort;
 
-	public AuthorizationFilter(JwtUtils jwtUtils) {
+	public AuthorizationFilter(JwtUtils jwtUtils, LoginStatusPort loginStatusPort) {
 		super(Config.class);
 		this.jwtUtils = jwtUtils;
+		this.loginStatusPort = loginStatusPort;
 	}
 
 	@Override
@@ -38,15 +42,20 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
 			if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
 				String token = authorizationHeader.substring(7);
 
-				if (jwtUtils.isValidToken(token)) {
-					String userId = jwtUtils.parseMemberIdFromToken(token);
-					exchange.getRequest().mutate()
-							.header("X-Authorization-Id", userId)
-							.build();
-					return chain.filter(exchange); // Token is valid, continue to the next filter
-				} else {
-					throw new TokenException("Token validation error");
+				if (!jwtUtils.isValidToken(token)) {
+					throw new GatewayResponseStatusException(HttpStatus.BAD_REQUEST,"Token validation error");
 				}
+
+				String userId = jwtUtils.parseMemberIdFromToken(token);
+				if (!loginStatusPort.isLoginMember(userId)) {
+					throw new GatewayResponseStatusException(HttpStatus.BAD_REQUEST,"다시 로그인 해주세요");
+				}
+
+				exchange.getRequest().mutate()
+						.header("X-Authorization-Id", userId)
+						.build();
+				return chain.filter(exchange); // Token is valid, continue to the next filter
+
 			}
 			return unauthorizedResponse(exchange); // Token is not valid, respond with unauthorized
 		};

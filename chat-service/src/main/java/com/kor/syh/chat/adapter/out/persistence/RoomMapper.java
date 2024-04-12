@@ -2,6 +2,7 @@ package com.kor.syh.chat.adapter.out.persistence;
 
 import org.springframework.stereotype.Component;
 
+import com.kor.syh.chat.application.port.out.RoomsDto;
 import com.kor.syh.chat.domain.Room;
 
 @Component
@@ -21,4 +22,13 @@ public class RoomMapper {
 						   .roomId(room.getRoomId())
 						   .build();
 	}
+
+	public RoomsDto toRoomsDto(RoomDocument roomDocument) {
+		return RoomsDto.builder()
+				   .roomId(roomDocument.getRoomId())
+				   .createDate(roomDocument.getCreateDate())
+				   .updateDate(roomDocument.getUpdateDate())
+				   .build();
+	}
+
 }

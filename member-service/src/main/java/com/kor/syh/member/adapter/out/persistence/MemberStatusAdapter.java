@@ -1,5 +1,7 @@
 package com.kor.syh.member.adapter.out.persistence;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -16,12 +18,15 @@ public class MemberStatusAdapter implements LoginStatusPort, LogoutStatusPort {
 
 	private final RedisTemplate<String, Object> redisTemplate;
 
-	@Value("${login.timeout}")
+
+	@Value("${jwt.token_validate_time}")
 	private Long loginTimeout;
 
 	@Override
 	public void login(String userId, String clientIp) {
-		redisTemplate.opsForHash().put(RedisKey.LOGIN_PREFIX + userId, clientIp, System.currentTimeMillis() + loginTimeout);
+		String key = RedisKey.LOGIN_PREFIX + userId;
+		redisTemplate.opsForHash().put(key, clientIp, System.currentTimeMillis() + loginTimeout);
+		redisTemplate.expire(key,loginTimeout, TimeUnit.MILLISECONDS);
 	}
 
 	@Override

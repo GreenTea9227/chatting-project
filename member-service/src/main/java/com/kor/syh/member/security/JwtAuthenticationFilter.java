@@ -2,6 +2,7 @@ package com.kor.syh.member.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtUtils jwtUtils;
 	private final FindMemberPort findMemberPort;
+
+
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+		String[] excludePath = {"/register", "/login"};
+		String path = request.getRequestURI();
+		return Arrays.stream(excludePath).anyMatch(path::startsWith);
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

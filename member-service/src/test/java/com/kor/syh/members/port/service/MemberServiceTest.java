@@ -16,9 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.kor.syh.common.UnitTest;
+import com.kor.syh.member.adapter.in.web.RegisterMemberRequest;
 import com.kor.syh.member.adapter.out.exception.MemberNotFoundException;
 import com.kor.syh.member.application.port.in.member.FindMemberResponse;
-import com.kor.syh.member.application.port.in.member.RegisterMemberCommand;
 import com.kor.syh.member.application.port.out.member.FindMemberPort;
 import com.kor.syh.member.application.port.out.member.RegisterMemberPort;
 import com.kor.syh.member.application.service.MemberService;
@@ -43,8 +43,8 @@ class MemberServiceTest {
 	@Test
 	void success_register_member() {
 		// given
-		RegisterMemberCommand command =
-			new RegisterMemberCommand("loginId", "password", "username", "nickname");
+		RegisterMemberRequest command =
+			new RegisterMemberRequest("loginId", "password", "username", "nickname");
 
 		doNothing().when(registerMemberPort).register(any(Member.class));
 		when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");

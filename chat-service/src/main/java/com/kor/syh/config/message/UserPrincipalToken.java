@@ -1,4 +1,4 @@
-package com.kor.syh.config;
+package com.kor.syh.config.message;
 
 import java.util.Collection;
 

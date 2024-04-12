@@ -9,6 +9,7 @@ spring:
       server:
         git:
           uri: https://github.com/GreenTea9227/config
+          default-label: main
   rabbitmq:
     host: 127.0.0.1
     username: guest

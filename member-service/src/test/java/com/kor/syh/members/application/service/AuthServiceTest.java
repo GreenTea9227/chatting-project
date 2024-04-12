@@ -15,6 +15,7 @@ import com.kor.syh.common.UnitTest;
 import com.kor.syh.common.jwt.JwtCreateRequestDto;
 import com.kor.syh.common.jwt.JwtUtils;
 import com.kor.syh.member.adapter.out.exception.PasswordMisMatchException;
+import com.kor.syh.member.application.port.in.auth.TokenInfo;
 import com.kor.syh.member.application.port.out.member.FindMemberPort;
 import com.kor.syh.member.application.port.out.member.LoginStatusPort;
 import com.kor.syh.member.application.port.out.member.TokenStoragePort;
@@ -54,15 +55,18 @@ class AuthServiceTest {
 		when(findMemberPort.findByLoginId(loginId)).thenReturn(member);
 		when(passwordEncoder.matches(password, member.getPassword())).thenReturn(true);
 		doNothing().when(loginStatusPort).login(any(), any());
-		String jwtToken = "jwt-token-value";
-		doNothing().when(tokenStoragePort).saveToken(member.getId(),jwtToken);
-		when(jwtUtils.generateJwtToken(any(JwtCreateRequestDto.class))).thenReturn(jwtToken);
+		String accessToken = "accessToken";
+		String refreshToken = "refreshToken";
+		doNothing().when(tokenStoragePort).saveToken(member.getId(),refreshToken);
+		when(jwtUtils.generateJwtToken(any(JwtCreateRequestDto.class))).thenReturn(accessToken);
+		when(jwtUtils.generateRefreshToken(any(JwtCreateRequestDto.class))).thenReturn(refreshToken);
 		// when
 
-		String responseJwt = authService.login(loginId, password, ip);
+		TokenInfo tokenInfo = authService.login(loginId, password, ip);
 
 		// then
-		assertThat(responseJwt).isEqualTo(jwtToken);
+		assertThat(tokenInfo.getAccessToken()).isEqualTo(accessToken);
+		assertThat(tokenInfo.getRefreshToken()).isEqualTo(refreshToken);
 	}
 
 	@DisplayName("로그인 실패")

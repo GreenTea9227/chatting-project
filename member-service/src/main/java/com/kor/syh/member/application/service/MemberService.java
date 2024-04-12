@@ -4,10 +4,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kor.syh.member.adapter.in.web.RegisterMemberRequest;
+import com.kor.syh.member.adapter.out.exception.DuplicateLoginIdException;
 import com.kor.syh.member.adapter.out.exception.PasswordMisMatchException;
 import com.kor.syh.member.application.port.in.member.FindMemberResponse;
 import com.kor.syh.member.application.port.in.member.FindMemberUseCase;
-import com.kor.syh.member.application.port.in.member.RegisterMemberCommand;
 import com.kor.syh.member.application.port.in.member.RegisterMemberUseCase;
 import com.kor.syh.member.application.port.out.member.FindMemberPort;
 import com.kor.syh.member.application.port.out.member.RegisterMemberPort;
@@ -25,14 +26,20 @@ public class MemberService implements RegisterMemberUseCase, FindMemberUseCase {
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public void register(RegisterMemberCommand command) {
-		String encodePassword = passwordEncoder.encode(command.getPassword());
+	public void register(RegisterMemberRequest request) {
+
+		boolean isMember = findMemberPort.isExistsMember(request.getLoginId());
+		if (isMember) {
+			throw new DuplicateLoginIdException("중복 Id입니다.");
+		}
+
+		String encodePassword = passwordEncoder.encode(request.getPassword());
 		Member member = Member.builder()
-							  .loginId(command.getLoginId())
+							  .loginId(request.getLoginId())
 							  .status(MemberStatus.USER)
-							  .nickname(command.getNickname())
+							  .nickname(request.getNickname())
 							  .password(encodePassword)
-							  .username(command.getUsername())
+							  .username(request.getUsername())
 							  .build();
 
 		registerMemberPort.register(member);

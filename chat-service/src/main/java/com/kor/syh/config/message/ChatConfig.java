@@ -1,4 +1,4 @@
-package com.kor.syh.config;
+package com.kor.syh.config.message;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
