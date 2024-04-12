@@ -15,10 +15,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.ConnectionLostException;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -48,22 +50,24 @@ public class StompTest {
 	@MockBean
 	private HandleMessageUseCase handleMessageUseCase;
 
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+
 	@LocalServerPort
 	private int port;
 
-	private String roomId = "room123";
-	private final String SEND_MESSAGE_ENDPOINT = "/send/chat/" + roomId;
-	private final String SUBSCRIBE_ENDPOINT = "/single/" + roomId;
+	private final String SEND_MESSAGE_ENDPOINT = "/send/chat";
+	private final String SUBSCRIBE_ENDPOINT = "/single";
 	private String URL;
 
 	WebSocketStompClient stompClient;
-	CompletableFuture<MessageDto> arriveMessage = new CompletableFuture<>();
+	CompletableFuture<MessageDto> arriveMessage;
 	StompSessionHandlerAdapter handler;
 
 	@BeforeEach
 	void setUp() {
 		URL = "ws://localhost:%d/ws".formatted(port);
-
+		arriveMessage = new CompletableFuture<>();
 		// websocket, sockjs, stomp 준비, 직렬화 설정
 		stompClient = new WebSocketStompClient(
 			new SockJsClient(List.of(new WebSocketTransport(new StandardWebSocketClient()))));
@@ -145,7 +149,13 @@ public class StompTest {
 		// given
 		when(jwtUtils.isValidToken(any())).thenReturn(true);
 		when(jwtUtils.parseMemberIdFromToken(any())).thenReturn("userIdFromToken");
-		doNothing().when(handleMessageUseCase).publishMessage(any());
+
+		doAnswer(invocation -> {
+			simpMessagingTemplate.convertAndSend(SUBSCRIBE_ENDPOINT, new MessageDto(
+				"roomId", "senderId", "content", MessageType.SEND
+			));
+			return null;
+		}).when(handleMessageUseCase).publishMessage(any(MessageDto.class));
 
 		StompHeaders headers = new StompHeaders();
 		headers.add("Authorization", "Bearer mytoken");
@@ -157,14 +167,14 @@ public class StompTest {
 		stompSession.subscribe(SUBSCRIBE_ENDPOINT, handler);
 
 		//when
-		stompSession.send(SEND_MESSAGE_ENDPOINT, new MessageDto(roomId, "123", "hello", MessageType.SEND));
+		stompSession.send(SEND_MESSAGE_ENDPOINT + "/roomId",
+			new MessageDto("secondRoom", "123", "hello", MessageType.SEND));
 
 		//then
 		assertThat(stompSession.isConnected()).isTrue();
 		verify(jwtUtils, times(1)).isValidToken(any());
 		verify(jwtUtils, times(1)).parseMemberIdFromToken(any());
 		verify(handleMessageUseCase, times(1)).publishMessage(any());
-
 	}
 
 }
