@@ -1,6 +1,7 @@
 package com.kor.syh.chat.adapter.in.web;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,6 +47,30 @@ class RoomControllerTest extends IntegrationTestEnvironment {
 		assertThat(documents.size()).isEqualTo(1);
 		assertThat(documents.get(0).getId()).isEqualTo(roomId);
 		assertThat(documents.get(0).getUpdateDate()).isBeforeOrEqualTo(LocalDateTime.now());
-
 	}
+
+	@DisplayName("유저가 방 목록을 가져온다.")
+	@Test
+	void getRooms() throws Exception {
+		// given
+		for (int i = 0; i < 12; i++) {
+			RoomDocument room = RoomDocument.builder()
+											.roomId("room" + i)
+											.build();
+
+			mongoTemplate.save(room, "room");
+		}
+		// when
+		ResultActions perform = mvc.perform(get("/room/rooms")
+			.param("page", "1")
+			.param("size", "10"));
+
+		// then
+		perform.andExpect(status().isOk())
+			   .andExpect(jsonPath("$.status").value("success"))
+			   .andExpect(jsonPath("$.message").value("success"))
+			   .andExpect(jsonPath("$.data.content", hasSize(2)))
+			   .andExpect(jsonPath("$.data.content[0].roomId", is(notNullValue())));
+	}
+
 }

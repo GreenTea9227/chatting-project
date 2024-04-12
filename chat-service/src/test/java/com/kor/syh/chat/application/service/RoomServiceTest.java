@@ -50,4 +50,22 @@ class RoomServiceTest {
 
 	}
 
+	@DisplayName("success create room")
+	@Test
+	void success_create_room() {
+		// given
+		String userId = "userId";
+		doNothing().when(roomPersistencePort).saveRoom(any(Room.class));
+		doNothing().when(roomCachePort).createRoom(any(String.class),eq(userId));
+
+		// when
+		RoomResponseDto room = roomService.createRoom(userId);
+
+		// then
+		assertThat(room.getRoomId()).isNotBlank();
+		verify(roomPersistencePort, times(1)).saveRoom(any(Room.class));
+		verify(roomCachePort, times(1)).createRoom(any(String.class), eq(userId));
+	}
+
+
 }

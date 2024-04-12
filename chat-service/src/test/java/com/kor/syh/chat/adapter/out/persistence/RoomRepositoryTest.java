@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 
 import com.kor.syh.chat.domain.Room;
 import com.kor.syh.common.UnitTest;
@@ -99,5 +101,24 @@ class RoomRepositoryTest extends IntegrationTestEnvironment {
 		assertThat(findRoom.getParticipants()).size().isEqualTo(2);
 		assertThat(findRoom.getParticipants()).containsExactly(firstId, thirdId);
 	}
+
+	@DisplayName("Get room list test")
+	@Test
+	void get_rooms_by_pageable() {
+		// given
+		for (int i = 0; i < 5; i++) {
+			springMongoRoomRepository.save(RoomDocument.builder().build());
+		}
+
+		// when
+		PageRequest pageRequest = PageRequest.of(0, 10);
+		Slice<RoomDocument> rooms = springMongoRoomRepository.findAllBy(pageRequest);
+
+		// then
+		assertThat(rooms.hasNext()).isFalse();
+		assertThat(rooms.hasPrevious()).isFalse();
+		assertThat(rooms.getContent()).size().isEqualTo(5);
+	}
+
 
 }
