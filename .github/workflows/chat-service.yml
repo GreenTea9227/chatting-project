@@ -1,0 +1,36 @@
+name: build
+
+on:
+  push:
+    branches: ['develop/**']
+    paths:
+      - chat-service/**
+      - common/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: Setup Java
+      uses: actions/setup-java@v4.2.1
+      with:
+        distribution: 'temurin'
+        java-version: 17
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v3
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: {{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: gradle permisson
+      run: |
+        chmod +x ./gradlew
+    - name: Build with Gradle
+      run: ./gradlew :chat-service:build
+    

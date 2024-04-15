@@ -2,17 +2,10 @@ name: build
 
 on:
   push:
-    branches:
-      - 'main'
-    paths-ignore:
-      - '**/README.md'
-      - '.github/workflows/**'
-  pull_request:
-    branches:
-      - '*'
-    paths-ignore:
-      - '**/README.md'
-      - '.github/workflows/**'
+    branches: ['develop/**']
+    paths:
+      - discovery-service/**
+      - common/**
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,5 +23,5 @@ jobs:
       run: |
         chmod +x ./gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew :discovery-service:build
     
