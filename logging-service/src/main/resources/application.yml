@@ -1,0 +1,5 @@
+kafka:
+  logging:
+    TOPIC: logging
+    GROUP_ID: group_id
+    SERVER: localhost:9092
