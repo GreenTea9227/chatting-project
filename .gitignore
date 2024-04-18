@@ -39,3 +39,4 @@ out/
 ### db.conf ###
 /db
 **/.jqwik-database
+**/*-aws.yml

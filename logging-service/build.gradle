@@ -4,7 +4,12 @@ version = '0.0.1-SNAPSHOT'
 dependencies {
 	implementation project(":common")
 
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+	implementation platform('software.amazon.awssdk:bom:2.21.1')
+	implementation 'software.amazon.awssdk:cloudwatch:2.25.31'
+	implementation 'software.amazon.awssdk:cloudwatchlogs:2.25.31'
+
+	implementation 'io.github.resilience4j:resilience4j-retry:2.2.0'
+
 
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.kafka:spring-kafka'
