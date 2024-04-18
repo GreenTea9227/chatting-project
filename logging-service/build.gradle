@@ -8,11 +8,12 @@ dependencies {
 	implementation 'software.amazon.awssdk:cloudwatch:2.25.31'
 	implementation 'software.amazon.awssdk:cloudwatchlogs:2.25.31'
 
-	implementation 'io.github.resilience4j:resilience4j-retry:2.2.0'
-
+	implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
 
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.kafka:spring-kafka'
+
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.15")
 }
 

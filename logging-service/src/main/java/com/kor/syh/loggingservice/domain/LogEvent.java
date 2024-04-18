@@ -2,6 +2,7 @@ package com.kor.syh.loggingservice.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
  * LogMessage 클래스는 로깅 데이터를 구조화하기 위해 사용됩니다.
  * 이 클래스는 로그 그룹, 로그 스트림, 그리고 로그 메시지를 포함합니다.
  */
+@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

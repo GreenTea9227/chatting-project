@@ -1,4 +1,4 @@
-package com.kor.syh.loggingservice.service;
+package com.kor.syh.loggingservice.adapter.in;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -8,6 +8,7 @@ import com.kor.syh.common.utils.JsonUtil;
 import com.kor.syh.loggingservice.application.port.out.SendLogPort;
 import com.kor.syh.loggingservice.domain.LogEvent;
 
+import io.github.resilience4j.retry.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,12 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 public class LoggingConsumer {
 
 	private final SendLogPort sendLogPort;
+	private final Retry retry;
 
 	@KafkaListener(topics = "${kafka.logging.TOPIC}")
 	public void loggingConsume(ConsumerRecord<String, String> record) {
 
 		LogEvent logEvent = JsonUtil.stringToClass(record.value(), LogEvent.class);
-		sendLogPort.sendLog(logEvent,record.timestamp());
+		Retry.decorateRunnable(retry, () -> {
+			sendLogPort.sendLog(logEvent, record.timestamp());
+		}).run();
 
 	}
 

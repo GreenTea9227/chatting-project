@@ -1,4 +1,4 @@
-package com.kor.syh.loggingservice.service;
+package com.kor.syh.loggingservice.adapter.out;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

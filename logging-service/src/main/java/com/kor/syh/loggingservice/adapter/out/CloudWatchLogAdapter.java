@@ -1,4 +1,4 @@
-package com.kor.syh.loggingservice.adapter;
+package com.kor.syh.loggingservice.adapter.out;
 
 import org.springframework.stereotype.Component;
 
@@ -30,20 +30,10 @@ public class CloudWatchLogAdapter implements SendLogPort {
 
 		String group = event.getGroup();
 		String stream = event.getStream();
+
 		try {
 
-			LogMessage logMessage = event.getLogMessage();
-
-			InputLogEvent inputLogEvent = InputLogEvent.builder()
-													   .message(JsonUtil.classToString(logMessage))
-													   .timestamp(timestamp)
-													   .build();
-
-			PutLogEventsRequest request = PutLogEventsRequest.builder()
-															 .logGroupName(group)
-															 .logStreamName(stream)
-															 .logEvents(inputLogEvent)
-															 .build();
+			PutLogEventsRequest request = createRequest(event, timestamp, group, stream);
 			cloudWatchLogsClient.putLogEvents(request);
 
 		} catch (CloudWatchException e) {
@@ -56,9 +46,24 @@ public class CloudWatchLogAdapter implements SendLogPort {
 				createLogStream(group, stream);
 			}
 			log.info("create group: [{}] , stream: [{}]", group, stream);
-
-			sendLog(event, timestamp);
+			throw e;
 		}
+	}
+
+	private static PutLogEventsRequest createRequest(LogEvent event, long timestamp, String group,
+		String stream) {
+		LogMessage logMessage = event.getLogMessage();
+
+		InputLogEvent inputLogEvent = InputLogEvent.builder()
+												   .message(JsonUtil.classToString(logMessage))
+												   .timestamp(timestamp)
+												   .build();
+
+		return PutLogEventsRequest.builder()
+								  .logGroupName(group)
+								  .logStreamName(stream)
+								  .logEvents(inputLogEvent)
+								  .build();
 	}
 
 	private boolean logGroupExists(String logGroupName) {
