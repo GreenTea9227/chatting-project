@@ -1,4 +1,4 @@
-name: build
+name: member-service
 
 on:
   push:

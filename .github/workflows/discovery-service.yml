@@ -1,4 +1,4 @@
-name: build
+name: discovery-service
 
 on:
   push:

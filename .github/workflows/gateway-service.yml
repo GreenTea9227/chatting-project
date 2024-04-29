@@ -1,4 +1,4 @@
-name: build
+name: gateway-service
 
 on:
   push:
